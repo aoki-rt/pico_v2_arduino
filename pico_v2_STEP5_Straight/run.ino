@@ -1,0 +1,143 @@
+// Copyright 2023 RT Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+RUN g_run;
+
+RUN::RUN()
+{
+  // TODO Auto-generated constructor stub
+  speed = 0.0;
+  accel = 0.0;
+  step_hz_r = MIN_HZ;
+  step_hz_l = MIN_HZ;
+  motor_move = 0;
+}
+
+RUN::~RUN()
+{
+  // TODO Auto-generated destructor stub
+}
+
+//割り込み
+void controlInterrupt(void) { g_run.interrupt(); }
+
+void RUN::interrupt(void)
+{  //割り込み内からコール
+  speed += accel;
+
+  if (speed > max_speed) {
+    speed = max_speed;
+  }
+  if (speed < min_speed) {
+    speed = min_speed;
+  }
+
+  speedSet(speed, speed);
+}
+
+void RUN::dirSet(t_CW_CCW dir_left, t_CW_CCW dir_right)
+{
+  if (dir_left == MOT_FORWARD) {
+    digitalWrite(CW_L, LOW);
+  } else {
+    digitalWrite(CW_L, HIGH);
+  }
+  if (dir_right == MOT_FORWARD) {
+    digitalWrite(CW_R, HIGH);
+  } else {
+    digitalWrite(CW_R, LOW);
+  }
+}
+
+void RUN::counterClear(void) { step_r = step_l = 0; }
+
+void RUN::speedSet(double l_speed, double r_speed)
+{
+  step_hz_l = (int)(l_speed / PULSE);
+  step_hz_r = (int)(r_speed / PULSE);
+}
+
+int RUN::stepGet(void)
+{
+  step_lr = step_r + step_l;
+  step_lr_len = (int)((float)step_lr / 2.0 * PULSE);
+  return step_lr;
+}
+
+void RUN::stop(void) { motor_move = 0; }
+
+void RUN::accelerate(int len, int finish_speed)
+{
+  int obj_step;
+
+  accel = 1.5;
+  speed = min_speed = MIN_SPEED;
+  max_speed = finish_speed;
+  counterClear();
+  speedSet(speed, speed);
+  dirSet(MOT_FORWARD, MOT_FORWARD);
+  obj_step = (int)((float)len * 2.0 / PULSE);
+  motor_move = 1;
+
+  while (stepGet() < obj_step) {
+    continue;
+  }
+}
+
+void RUN::oneStep(int len, int init_speed)
+{
+  int obj_step;
+
+  accel = 0.0;
+  max_speed = init_speed;
+  speed = min_speed = init_speed;
+  counterClear();
+  speedSet(init_speed, init_speed);
+  dirSet(MOT_FORWARD, MOT_FORWARD);
+  obj_step = (int)((float)len * 2.0 / PULSE);
+
+  while (stepGet() < obj_step) {
+    continue;
+  }
+}
+
+void RUN::decelerate(int len, int init_speed)
+{
+  int obj_step;
+
+  accel = 1.5;
+  max_speed = init_speed;
+  speed = min_speed = init_speed;
+  counterClear();
+  speedSet(init_speed, init_speed);
+  dirSet(MOT_FORWARD, MOT_FORWARD);
+  obj_step = (int)((float)len * 2.0 / PULSE);
+
+  while (1) {
+    stepGet();
+    if (
+      (int)(len - step_lr_len) <
+      (int)(((speed * speed) - (MIN_SPEED * MIN_SPEED)) / (2.0 * 1000.0 * accel))) {
+      break;
+    }
+  }
+  accel = -1.5;
+  min_speed = MIN_SPEED;
+
+  while (stepGet() < obj_step) {
+    continue;
+  }
+
+  stop();
+}
