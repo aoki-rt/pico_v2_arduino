@@ -30,7 +30,7 @@
 
 #define MIN_HZ 40
 #define TIRE_DIAMETER (24.70)
-#define PULSE (TIRE_DIAMETER * PI / (35.0 / 10.0 * 20.0 * 8.0))
+#define PULSE (TIRE_DIAMETER * PI / (35.0 / 10.0 * 20.0 * 2.0))
 #define MIN_SPEED (MIN_HZ * PULSE)
 
 hw_timer_t * g_timer0 = NULL;
@@ -88,8 +88,8 @@ void setup()
   pinMode(LED2, OUTPUT);
   pinMode(LED3, OUTPUT);
 
-  pinMode(SW_L, INPUT);
-  pinMode(SW_R, INPUT);
+  pinMode(SW_L, INPUT_PULLUP);
+  pinMode(SW_R, INPUT_PULLUP);
 
   //motor disable
   pinMode(MOTOR_EN, OUTPUT);

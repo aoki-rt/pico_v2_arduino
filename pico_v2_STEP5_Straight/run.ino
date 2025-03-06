@@ -68,11 +68,10 @@ void RUN::speedSet(double l_speed, double r_speed)
   step_hz_r = (int)(r_speed / PULSE);
 }
 
-int RUN::stepGet(void)
+void RUN::stepGet(void)
 {
   step_lr = step_r + step_l;
   step_lr_len = (int)((float)step_lr / 2.0 * PULSE);
-  return step_lr;
 }
 
 void RUN::stop(void) { motor_move = 0; }
@@ -90,8 +89,11 @@ void RUN::accelerate(int len, int finish_speed)
   obj_step = (int)((float)len * 2.0 / PULSE);
   motor_move = 1;
 
-  while (stepGet() < obj_step) {
-    continue;
+  while (1) {
+    stepGet();
+    if (step_lr > obj_step) {
+      break;
+    }
   }
 }
 
@@ -107,8 +109,11 @@ void RUN::oneStep(int len, int init_speed)
   dirSet(MOT_FORWARD, MOT_FORWARD);
   obj_step = (int)((float)len * 2.0 / PULSE);
 
-  while (stepGet() < obj_step) {
-    continue;
+  while (1) {
+    stepGet();
+    if (step_lr > obj_step) {
+      break;
+    }
   }
 }
 
@@ -127,7 +132,7 @@ void RUN::decelerate(int len, int init_speed)
   while (1) {
     stepGet();
     if (
-      (int)(len - step_lr_len) <
+      (len - step_lr_len) <
       (int)(((speed * speed) - (MIN_SPEED * MIN_SPEED)) / (2.0 * 1000.0 * accel))) {
       break;
     }
@@ -135,8 +140,11 @@ void RUN::decelerate(int len, int init_speed)
   accel = -1.5;
   min_speed = MIN_SPEED;
 
-  while (stepGet() < obj_step) {
-    continue;
+  while (1) {
+    stepGet();
+    if (step_lr > obj_step) {
+      break;
+    }
   }
 
   stop();

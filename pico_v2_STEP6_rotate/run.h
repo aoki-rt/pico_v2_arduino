@@ -15,6 +15,8 @@
 #ifndef SRC_RUN_H_
 #define SRC_RUN_H_
 
+typedef enum { front, right, left, rear } t_local_direction;
+
 typedef enum {
   MOT_FORWARD = 1,  //TMC5240の方向に合わせた数字
   MOT_BACK = 2
@@ -28,8 +30,8 @@ public:
   volatile double speed;
   volatile double max_speed;
   volatile double min_speed;
-  volatile int step_hz_l , step_hz_r;
-  volatile int step_r ,step_l;
+  volatile int step_hz_l, step_hz_r;
+  volatile int step_r, step_l;
   volatile char motor_move;
 
   RUN();
@@ -43,6 +45,7 @@ public:
   void accelerate(int len, int finish_speed);
   void oneStep(int len, int init_speed);
   void decelerate(int len, int init_speed);
+  void rotate(t_local_direction dir, int times);
 
 private:
   int step_lr_len, step_lr;

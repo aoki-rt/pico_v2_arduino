@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "run.h"
+
 #define LED0 42
 #define LED1 41
 #define LED2 15
@@ -28,34 +30,15 @@
 
 #define MIN_HZ 40
 #define TIRE_DIAMETER (24.70)
-#define PULSE (TIRE_DIAMETER * PI / (35.0 / 10.0 * 20.0 * 8.0))
+#define PULSE (TIRE_DIAMETER * PI / (35.0 / 10.0 * 20.0 * 2.0))
 #define MIN_SPEED (MIN_HZ * PULSE)
 #define TREAD_WIDTH (31.5)
-
-typedef enum {
-  front,
-  right,
-  rear,
-  left,
-  unknown,
-} t_local_dir;
 
 hw_timer_t * g_timer0 = NULL;
 hw_timer_t * g_timer2 = NULL;
 hw_timer_t * g_timer3 = NULL;
 
 portMUX_TYPE g_timer_mux = portMUX_INITIALIZER_UNLOCKED;
-
-unsigned short g_step_hz_r = MIN_HZ;
-unsigned short g_step_hz_l = MIN_HZ;
-
-volatile unsigned int g_step_r, g_step_l;
-double g_max_speed;
-double g_min_speed;
-double g_accel = 0.0;
-volatile double g_speed = MIN_SPEED;
-
-volatile bool g_motor_move = 0;
 
 //割り込み
 //目標値の更新周期1kHz
@@ -70,14 +53,14 @@ void IRAM_ATTR onTimer0(void)
 void IRAM_ATTR isrR(void)
 {
   portENTER_CRITICAL_ISR(&g_timer_mux);  //割り込み禁止
-  if (g_motor_move) {
-    timerAlarm(g_timer2, 2000000 / g_step_hz_r, true, 0);
+  if (g_run.motor_move) {
+    timerAlarm(g_timer2, 2000000 / g_run.step_hz_r, true, 0);
     digitalWrite(PWM_R, HIGH);
     for (int i = 0; i < 100; i++) {
       asm("nop \n");
     }
     digitalWrite(PWM_R, LOW);
-    g_step_r++;
+    g_run.step_r++;
   }
   portEXIT_CRITICAL_ISR(&g_timer_mux);  //割り込み許可
 }
@@ -86,14 +69,14 @@ void IRAM_ATTR isrR(void)
 void IRAM_ATTR isrL(void)
 {
   portENTER_CRITICAL_ISR(&g_timer_mux);  //割り込み禁止
-  if (g_motor_move) {
-    timerAlarm(g_timer3, 2000000 / g_step_hz_l, true, 0);
+  if (g_run.motor_move) {
+    timerAlarm(g_timer3, 2000000 / g_run.step_hz_l, true, 0);
     digitalWrite(PWM_L, HIGH);
     for (int i = 0; i < 100; i++) {
       asm("nop \n");
     };
     digitalWrite(PWM_L, LOW);
-    g_step_l++;
+    g_run.step_l++;
   }
   portEXIT_CRITICAL_ISR(&g_timer_mux);  //割り込み許可
 }
@@ -106,8 +89,8 @@ void setup()
   pinMode(LED2, OUTPUT);
   pinMode(LED3, OUTPUT);
 
-  pinMode(SW_L, INPUT);
-  pinMode(SW_R, INPUT);
+  pinMode(SW_L, INPUT_PULLUP);
+  pinMode(SW_R, INPUT_PULLUP);
 
   //motor disable
   pinMode(MOTOR_EN, OUTPUT);
@@ -146,13 +129,13 @@ void loop()
   }
   digitalWrite(MOTOR_EN, HIGH);
   delay(1000);
-  rotate(right, 1);
+  g_run.rotate(right, 1);
   delay(1000);
-  rotate(left, 1);
+  g_run.rotate(left, 1);
   delay(1000);
-  rotate(right, 2);
+  g_run.rotate(right, 2);
   delay(1000);
-  rotate(left, 2);
+  g_run.rotate(left, 2);
   delay(1000);
   digitalWrite(MOTOR_EN, LOW);
 }
