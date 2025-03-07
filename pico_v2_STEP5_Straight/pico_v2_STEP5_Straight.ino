@@ -39,6 +39,12 @@ hw_timer_t * g_timer3 = NULL;
 
 portMUX_TYPE g_timer_mux = portMUX_INITIALIZER_UNLOCKED;
 
+volatile bool g_motor_move = 0;
+volatile unsigned int g_step_r, g_step_l;
+unsigned short g_step_hz_r = MIN_HZ;
+unsigned short g_step_hz_l = MIN_HZ;
+
+
 //割り込み
 //目標値の更新周期1kHz
 void IRAM_ATTR onTimer0(void)
@@ -52,14 +58,14 @@ void IRAM_ATTR onTimer0(void)
 void IRAM_ATTR isrR(void)
 {
   portENTER_CRITICAL_ISR(&g_timer_mux);  //割り込み禁止
-  if (g_run.motor_move) {
-    timerAlarm(g_timer2, 2000000 / g_run.step_hz_r, true, 0);
+  if (g_motor_move) {
+    timerAlarm(g_timer2, 2000000 / g_step_hz_r, true, 0);
     digitalWrite(PWM_R, HIGH);
     for (int i = 0; i < 100; i++) {
       asm("nop \n");
     }
     digitalWrite(PWM_R, LOW);
-    g_run.step_r++;
+    g_step_r++;
   }
   portEXIT_CRITICAL_ISR(&g_timer_mux);  //割り込み許可
 }
@@ -68,14 +74,14 @@ void IRAM_ATTR isrR(void)
 void IRAM_ATTR isrL(void)
 {
   portENTER_CRITICAL_ISR(&g_timer_mux);  //割り込み禁止
-  if (g_run.motor_move) {
-    timerAlarm(g_timer3, 2000000 / g_run.step_hz_l, true, 0);
+  if (g_motor_move) {
+    timerAlarm(g_timer3, 2000000 / g_step_hz_l, true, 0);
     digitalWrite(PWM_L, HIGH);
     for (int i = 0; i < 100; i++) {
       asm("nop \n");
     };
     digitalWrite(PWM_L, LOW);
-    g_run.step_l++;
+    g_step_l++;
   }
   portEXIT_CRITICAL_ISR(&g_timer_mux);  //割り込み許可
 }

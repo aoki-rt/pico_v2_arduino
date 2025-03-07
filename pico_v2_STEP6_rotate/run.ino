@@ -19,9 +19,6 @@ RUN::RUN()
   // TODO Auto-generated constructor stub
   speed = 0.0;
   accel = 0.0;
-  step_hz_r = MIN_HZ;
-  step_hz_l = MIN_HZ;
-  motor_move = 0;
 }
 
 RUN::~RUN()
@@ -60,21 +57,21 @@ void RUN::dirSet(t_CW_CCW dir_left, t_CW_CCW dir_right)
   }
 }
 
-void RUN::counterClear(void) { step_r = step_l = 0; }
+void RUN::counterClear(void) { g_step_r = g_step_l = 0; }
 
 void RUN::speedSet(double l_speed, double r_speed)
 {
-  step_hz_l = (int)(l_speed / PULSE);
-  step_hz_r = (int)(r_speed / PULSE);
+  g_step_hz_l = (int)(l_speed / PULSE);
+  g_step_hz_r = (int)(r_speed / PULSE);
 }
 
 void RUN::stepGet(void)
 {
-  step_lr = step_r + step_l;
+  step_lr = g_step_r + g_step_l;
   step_lr_len = (int)((float)step_lr / 2.0 * PULSE);
 }
 
-void RUN::stop(void) { motor_move = 0; }
+void RUN::stop(void) { g_motor_move = 0; }
 
 void RUN::accelerate(int len, int finish_speed)
 {
@@ -87,7 +84,7 @@ void RUN::accelerate(int len, int finish_speed)
   speedSet(speed, speed);
   dirSet(MOT_FORWARD, MOT_FORWARD);
   obj_step = (int)((float)len * 2.0 / PULSE);
-  motor_move = 1;
+  g_motor_move = 1;
 
   while (1) {
     stepGet();
@@ -164,15 +161,15 @@ void RUN::rotate(t_local_direction dir, int times)
   switch (dir) {
     case right:
       dirSet(MOT_FORWARD, MOT_BACK);
-      motor_move = 1;
+      g_motor_move = 1;
       break;
     case left:
       dirSet(MOT_BACK, MOT_FORWARD);
-      motor_move = 1;
+      g_motor_move = 1;
       break;
     default:
       dirSet(MOT_FORWARD, MOT_FORWARD);
-      motor_move = 0;
+      g_motor_move = 0;
       break;
   }
 

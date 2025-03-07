@@ -16,7 +16,7 @@
 #define SRC_RUN_H_
 
 typedef enum {
-  MOT_FORWARD = 1,  //TMC5240の方向に合わせた数字
+  MOT_FORWARD = 1,
   MOT_BACK = 2
 } t_CW_CCW;
 
@@ -28,9 +28,7 @@ public:
   volatile double speed;
   volatile double max_speed;
   volatile double min_speed;
-  volatile int step_hz_l , step_hz_r;
-  volatile int step_r ,step_l;
-  volatile char motor_move;
+
 
   RUN();
   virtual ~RUN();
