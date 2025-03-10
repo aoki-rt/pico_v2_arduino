@@ -102,115 +102,114 @@ void ADJUST::mapView(void)
 
 void ADJUST::adcView(void)
 {
-  {
-    motorDisable();
+  motorDisable();
 
+  while (1) {
+    Serial.printf("r_sen        is\t%d   \r\n", g_sensor.sen_r.value);
+    Serial.printf("fr_sen       is\t%d   \r\n", g_sensor.sen_fr.value);
+    Serial.printf("fl_sen       is\t%d  \r\n", g_sensor.sen_fl.value);
+    Serial.printf("l_sen        is\t%d   \r\n", g_sensor.sen_l.value);
+    Serial.printf("VDD          is\t%d mV\r\n", g_sensor.battery_value);
+    Serial.printf("\n\r");  //改行
+    delay(100);
+    Serial.printf("\x1b[2j");
+    Serial.printf("\x1b[0;0H");
+  }
+}
+
+void ADJUST::straightCheck(int section_check)
+{
+  motorEnable();
+  delay(1000);
+  g_run.accelerate(HALF_SECTION, g_run.search_speed);
+  if (section_check > 1) {
+    g_run.straight(
+      SECTION * (section_check - 1), g_run.search_speed, g_run.max_speed, g_run.search_speed);
+  }
+  g_run.decelerate(HALF_SECTION, g_run.search_speed);
+
+  motorDisable();
+}
+
+void ADJUST::rotationCheck(void)
+{
+  motorEnable();
+  delay(1000);
+  for (int i = 0; i < 8; i++) {
+    g_run.rotate(right, 1);
+  }
+  motorDisable();
+}
+
+void ADJUST::menu(void)
+{
+  unsigned char l_mode = 1;
+  char LED3_data;
+  char sw;
+
+  while (1) {
+    ledSet(l_mode);
     while (1) {
-      Serial.printf("r_sen        is\t%d   \r\n", g_sensor.sen_r.value);
-      Serial.printf("fr_sen       is\t%d   \r\n", g_sensor.sen_fr.value);
-      Serial.printf("fl_sen       is\t%d  \r\n", g_sensor.sen_fl.value);
-      Serial.printf("l_sen        is\t%d   \r\n", g_sensor.sen_l.value);
-      Serial.printf("VDD          is\t%d mV\r\n", g_sensor.battery_value);
-      Serial.printf("\n\r");  //改行
-      delay(100);
-      Serial.printf("\x1b[2j");
-      Serial.printf("\x1b[0;0H");
+      sw = switchGet();
+      if (sw != 0) break;
+      delay(33);
+      LED3_data ^= 1;
+      ledSet((l_mode & 0x7) + ((LED3_data << 3) & 0x08));
     }
-  }
-
-  void ADJUST::straightCheck(int section_check)
-  {
-    motorEnable();
-    delay(1000);
-    g_run.accelerate(HALF_SECTION, g_run.search_speed);
-    if (section_check > 1) {
-      g_run.straight(
-        SECTION * (section_check - 1), g_run.search_speed, g_run.max_speed, g_run.search_speed);
-    }
-    g_run.decelerate(HALF_SECTION, g_run.search_speed);
-
-    motorDisable();
-  }
-
-  void ADJUST::rotationCheck(void)
-  {
-    motorEnable();
-    delay(1000);
-    for (int i = 0; i < 8; i++) {
-      g_run.rotate(right, 1);
-    }
-    motorDisable();
-  }
-
-  void ADJUST::menu(void)
-  {
-    unsigned char l_mode = 1;
-    char LED3_data;
-    char sw;
-
-    while (1) {
-      ledSet(l_mode);
-      while (1) {
-        sw = switchGet();
-        if (sw != 0) break;
-        delay(33);
-        LED3_data ^= 1;
-        ledSet((l_mode & 0x7) + ((LED3_data << 3) & 0x08));
-      }
-      LED3_data = 0;
-      switch (sw) {
-        case SW_RM:
-          l_mode = g_misc.buttonInc(l_mode, 7, 1);
-          break;
-        case SW_LM:
-          g_misc.buttonOk();
-          if (modeExec(l_mode) == 1) {
-            return;
-          }
-          break;
-        default:
-          break;
-      }
-    }
-  }
-
-  unsigned char ADJUST::modeExec(unsigned char l_mode)
-  {
-    motorDisable();
-    switch (l_mode) {
-      case 1:
-        buzzerEnable(INC_FREQ);
-        delay(30);
-        buzzerDisable();
-        delay(500);
-        buzzerEnable(INC_FREQ);
-        delay(30);
-        buzzerDisable();
-        webServerSetup();
-        //      adcView();
+    LED3_data = 0;
+    switch (sw) {
+      case SW_RM:
+        l_mode = g_misc.buttonInc(l_mode, 7, 1);
         break;
-      case 2:
-        straightCheck(9);
+      case SW_LM:
+        g_misc.buttonOk();
+        if (modeExec(l_mode) == 1) {
+          return;
+        }
         break;
-
-      case 3:
-        rotationCheck();
-        break;
-      case 4:
-        mapCopy();
-        mapView();
-        break;
-
-      case 5:
-        break;
-
-      case 6:
-        break;
-
       default:
-        return 1;
         break;
     }
-
-    return 0;
   }
+}
+
+unsigned char ADJUST::modeExec(unsigned char l_mode)
+{
+  motorDisable();
+  switch (l_mode) {
+    case 1:
+      buzzerEnable(INC_FREQ);
+      delay(30);
+      buzzerDisable();
+      delay(500);
+      buzzerEnable(INC_FREQ);
+      delay(30);
+      buzzerDisable();
+      webServerSetup();
+      //      adcView();
+      break;
+    case 2:
+      straightCheck(9);
+      break;
+
+    case 3:
+      rotationCheck();
+      break;
+    case 4:
+      mapCopy();
+      mapView();
+      break;
+
+    case 5:
+      break;
+
+    case 6:
+      break;
+
+    default:
+      return 1;
+      break;
+  }
+
+  return 0;
+}

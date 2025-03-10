@@ -19,8 +19,8 @@ hw_timer_t * g_timer3 = NULL;
 
 volatile bool g_motor_move = 0;
 volatile unsigned int g_step_r, g_step_l;
-unsigned short g_step_hz_r = MIN_HZ;
-unsigned short g_step_hz_l = MIN_HZ;
+unsigned short g_step_hz_r = 30;
+unsigned short g_step_hz_l = 30;
 
 portMUX_TYPE g_timer_mux = portMUX_INITIALIZER_UNLOCKED;
 
