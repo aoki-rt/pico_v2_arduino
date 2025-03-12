@@ -16,23 +16,12 @@
 
 FAST g_fast;
 
-FAST::FAST()
-{
-  // TODO Auto-generated constructor stub
-}
-
-FAST::~FAST()
-{
-  // TODO Auto-generated destructor stub
-}
-
 void FAST::run(short gx, short gy)
 {
   t_global_direction glob_nextdir;
   int straight_count = 0;
 
-  t_local_direction temp_next_dir = g_map.nextDir2Get(gx, gy, &glob_nextdir);
-  switch (temp_next_dir) {
+  switch (g_map.nextDir2Get(gx, gy, &glob_nextdir)) {
     case right:
       g_run.rotate(right, 1);  //右に曲がって
       break;

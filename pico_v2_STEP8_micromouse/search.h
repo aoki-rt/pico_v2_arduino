@@ -11,21 +11,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+#ifndef SRC_SEARCH_H_
+#define SRC_SEARCH_H_
 
-#ifndef SRC_MISC_H_
-#define SRC_MISC_H_
 
-class MISC
-{
+class SEARCH {
 public:
-  unsigned char mode_select;
-  void modeExec(int mode);
-  short buttonInc(short _data, short limit, short limit_data);
-  void buttonOk(void);
-  void goalAppeal(void);
-  void errorAppeal(void);
+	void lefthand(void);
+	void adachi(char gx, char gy);
+private:
+
 };
-
-extern MISC g_misc;
-
-#endif /* SRC_MISC_H_ */
+extern SEARCH g_search;
+#endif /* SRC_SEARCH_H_ */

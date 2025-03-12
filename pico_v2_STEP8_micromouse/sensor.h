@@ -12,20 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef SRC_MISC_H_
-#define SRC_MISC_H_
+#ifndef SRC_SENSOR_H_
+#define SRC_SENSOR_H_
 
-class MISC
+#include "run.h"
+
+typedef struct
 {
+  short value;
+  short p_value;
+  short error;
+  short ref;
+  short th_wall;
+  short th_control;
+  bool is_wall;
+  bool is_control;
+} t_sensor;
+
+
+class SENSOR{
 public:
-  unsigned char mode_select;
-  void modeExec(int mode);
-  short buttonInc(short _data, short limit, short limit_data);
-  void buttonOk(void);
-  void goalAppeal(void);
-  void errorAppeal(void);
+	volatile t_sensor sen_r, sen_l, sen_fr, sen_fl;
+	volatile short battery_value;
+	void interrupt(void);
 };
 
-extern MISC g_misc;
+extern SENSOR g_sensor;
 
-#endif /* SRC_MISC_H_ */
+#endif /* SRC_SENSOR_H_ */

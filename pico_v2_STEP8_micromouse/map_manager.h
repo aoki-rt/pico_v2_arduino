@@ -46,15 +46,14 @@ class MapManager
 {
 public:
   MapManager();
-  virtual ~MapManager();
 
   t_position mypos;
   short goal_mx, goal_my;
 
   void axisUpdate(void);
   void nextDir(t_local_direction dir);
-  t_local_direction getNextDir(char x, char y, t_global_direction * dir);
-  t_local_direction getNextDir2(short x, short y, t_global_direction * dir);
+  t_local_direction nextDirGet(char x, char y, t_global_direction * dir);
+  t_local_direction nextDir2Get(short x, short y, t_global_direction * dir);
   void positionInit(void);
   void wallDataSet(unsigned char x, unsigned char y, t_global_direction dir, char data);
   char wallDataGet(unsigned char x, unsigned char y, t_global_direction dir);

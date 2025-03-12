@@ -19,15 +19,9 @@ RUN g_run;
 
 RUN::RUN()
 {
-  // TODO Auto-generated constructor stub
   speed = 0.0;
   accel = 0.0;
   con_wall.kp = CON_WALL_KP;
-}
-
-RUN::~RUN()
-{
-  // TODO Auto-generated destructor stub
 }
 
 //割り込み

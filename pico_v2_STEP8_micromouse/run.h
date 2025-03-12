@@ -56,7 +56,6 @@ public:
   float pulse;
 
   RUN();
-  virtual ~RUN();
   void interrupt(void);
   void counterClear(void);
   void straight(int len, int init_speed, int max_sp, int finish_speed);

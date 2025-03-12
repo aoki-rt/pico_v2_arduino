@@ -25,7 +25,7 @@ unsigned short g_step_hz_l = 30;
 portMUX_TYPE g_timer_mux = portMUX_INITIALIZER_UNLOCKED;
 
 void stepHzSetR(short data) { g_step_hz_r = data; }
-void stepHzSetR(short data) { g_step_hz_l = data; }
+void stepHzSetL(short data) { g_step_hz_l = data; }
 void stepClearR(void) { g_step_r = 0; }
 void stepClearL(void) { g_step_l = 0; }
 unsigned int stepGetR(void) { return g_step_r; }
@@ -149,33 +149,6 @@ void deviceInit(void)
 
   Serial.begin(115200);
 }
-/*
-
-  g_sen_r.ref = REF_SEN_R;
-  g_sen_l.ref = REF_SEN_L;
-  g_sen_r.th_wall = TH_SEN_R;
-  g_sen_l.th_wall = TH_SEN_L;
-
-  g_sen_fr.th_wall = TH_SEN_FR;
-  g_sen_fl.th_wall = TH_SEN_FL;
-
-  g_sen_r.th_control = CONTROL_TH_SEN_R;
-  g_sen_l.th_control = CONTROL_TH_SEN_L;
-
-  g_con_wall.kp = CON_WALL_KP;
-
-  g_map_control.setGoalX(GOAL_X);
-  g_map_control.setGoalY(GOAL_Y);
-
-  g_motor_move = false;
-  setRStepHz(MIN_SPEED);
-  setLStepHz(MIN_SPEED);
-
-  enableBuzzer(INC_FREQ);
-  delay(80);
-  disableBuzzer();
-}
-*/
 
 //LED
 void ledSet(unsigned char data)
@@ -205,7 +178,7 @@ void buzzerDisable(void) { ledcWrite(BUZZER, 0); }  //duty 0% Buzzer OFF
 
 //motor
 void motorEnable(void) { digitalWrite(MOTOR_EN, HIGH); }  //Power ON
-void motorDisable(void){digitalWrite(MOTOR_EN, LOW)};     //Power OFF
+void motorDisable(void) { digitalWrite(MOTOR_EN, LOW); }  //Power OFF
 
 void motorDirectionSet(t_CW_CCW left_CW, t_CW_CCW right_CW)
 {  //左右のモータの回転方向を指示する

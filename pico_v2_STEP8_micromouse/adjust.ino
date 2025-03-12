@@ -16,16 +16,6 @@
 
 ADJUST g_adjust;
 
-ADJUST::ADJUST()
-{
-  // TODO Auto-generated constructor stub
-}
-
-ADJUST::~ADJUST()
-{
-  // TODO Auto-generated destructor stub
-}
-
 void ADJUST::mapView(void)
 {
   Serial.printf("\x1b[2j");
@@ -186,6 +176,7 @@ unsigned char ADJUST::modeExec(unsigned char l_mode)
       delay(30);
       buzzerDisable();
       webServerSetup();
+      //webserberでセンサの値のばらつきが大きぎて判断できない時は、webSerberSetup()をコメントアウトしadcView()のコメントをはずし、シリアルモニタで確認してください。
       //      adcView();
       break;
     case 2:

@@ -273,7 +273,7 @@ void paramRead(void)
       flashInit();
       break;
     }
-    g_run.pulse = g_run.tire_diameter * PI / (200.0 * microstep);
+    g_run.pulse = g_run.tire_diameter * PI / (35.0 / 10.0 * 20.0 *8.0);
     cmds[0] = {"\0"};
     cmds[1] = {"\0"};
   }
@@ -321,7 +321,6 @@ void writeFile(fs::FS & fs, String path, String message)
 {
   Serial.printf("Writing file: ");
   Serial.println(path);
-  //  Serial.println(message);
 
   File file = fs.open(path, FILE_WRITE);
   if (!file) {
@@ -329,7 +328,6 @@ void writeFile(fs::FS & fs, String path, String message)
     return;
   }
   if (file.print(message)) {
-    //    Serial.println("- file written");
   } else {
     Serial.println("- frite failed");
   }
@@ -340,7 +338,6 @@ void appendFile(fs::FS & fs, String path, String message)
 {
   Serial.printf("Appending to file: ");
   Serial.println(path);
-  //  Serial.println(message);
 
   File file = fs.open(path, FILE_APPEND);
   if (!file) {
@@ -348,7 +345,6 @@ void appendFile(fs::FS & fs, String path, String message)
     return;
   }
   if (file.print(message)) {
-    //    Serial.println("- message appended");
   } else {
     Serial.println("- append failed");
   }

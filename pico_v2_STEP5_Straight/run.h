@@ -31,7 +31,6 @@ public:
 
 
   RUN();
-  virtual ~RUN();
   void interrupt(void);
   void counterClear(void);
   void dirSet(t_CW_CCW dir_left, t_CW_CCW dir_right);

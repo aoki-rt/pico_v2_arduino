@@ -18,8 +18,6 @@
 class ADJUST
 {
 public:
-  ADJUST();
-  virtual ~ADJUST();
   void menu(void);
   void mapView(void);
   void adcView(void);

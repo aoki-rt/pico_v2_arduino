@@ -19,18 +19,14 @@ RUN g_run;
 
 RUN::RUN()
 {
-  // TODO Auto-generated constructor stub
   speed = 0.0;
   accel = 0.0;
 }
 
-RUN::~RUN()
-{
-  // TODO Auto-generated destructor stub
-}
-
 //割り込み
-void controlInterrupt(void) { g_run.interrupt(); }
+void controlInterrupt(void) {
+   g_run.interrupt();
+}
 
 void RUN::interrupt(void)
 {  //割り込み内からコール
@@ -107,7 +103,7 @@ void RUN::stop(void)
   delay(300);
 }
 
-void straight(int len, int init_speed, int max_sp, int finish_speed)
+void RUN::straight(int len, int init_speed, int max_sp, int finish_speed)
 {
   int obj_step;
 
@@ -128,7 +124,7 @@ void straight(int len, int init_speed, int max_sp, int finish_speed)
   con_wall.enable = true;
   speedSet(speed, speed);
   dirSet(MOT_FORWARD, MOT_FORWARD);
-  obj_step = (int)((float)len * 2.0 / PULSE);
+  obj_step = (int)((float)len * 2.0 / pulse);
   controlInterruptStart();
   motorMoveSet(1);
 
@@ -157,7 +153,7 @@ void straight(int len, int init_speed, int max_sp, int finish_speed)
   }
 }
 
-void accelerate(int len, int finish_speed)
+void RUN::accelerate(int len, int finish_speed)
 {
   int obj_step;
 
@@ -188,7 +184,7 @@ void accelerate(int len, int finish_speed)
   controlInterruptStart();
 }
 
-void oneStep(int len, int tar_speed)
+void RUN::oneStep(int len, int tar_speed)
 {
   int obj_step;
   controlInterruptStop();
@@ -243,45 +239,48 @@ void decelerate(int len, int tar_speed)
   delay(300);
 }
 
-void rotate(t_direction dir, int times)
+void RUN::rotate(t_local_direction dir, int times)
 {
   int obj_step;
+
   controlInterruptStop();
-  g_max_speed = SEARCH_SPEED;
-  g_accel = TURN_ACCEL;
-  g_speed = g_min_speed = MIN_SPEED;
-  setRStepHz((unsigned short)(g_speed / PULSE));
-  setLStepHz((unsigned short)(g_speed / PULSE));
-  clearStepR();
-  clearStepL();
-  g_con_wall.enable = false;
-  obj_step = (int)(TREAD_WIDTH * PI / 4.0 * (float)times * 2.0 / PULSE);
+  accel = turn_accel;
+  upper_speed_limit = search_speed;
+  speed = lower_speed_limit = MIN_SPEED;
+  con_wall.enable = false;
+  obj_step = (int)(TREAD_WIDTH * PI / 4.0 * (float)times * 2.0 / pulse);
 
   switch (dir) {
     case right:
-      moveDir(MOT_FORWARD, MOT_BACK);
-      g_motor_move = 1;
+      dirSet(MOT_FORWARD, MOT_BACK);
+      motorMoveSet(1);    
       break;
     case left:
-      moveDir(MOT_BACK, MOT_FORWARD);
-      g_motor_move = 1;
+      dirSet(MOT_BACK, MOT_FORWARD);
+      motorMoveSet(1);    
       break;
     default:
-      g_motor_move = 0;
+      motorMoveSet(0);    
       break;
   }
+  speedSet(MIN_SPEED, MIN_SPEED);
+  counterClear();  
   controlInterruptStart();
 
-  while (((obj_step - (getStepR() + getStepL())) / 2.0 * PULSE) >
-         (((g_speed * g_speed) - (MIN_SPEED * MIN_SPEED)) / (2.0 * 1000.0 * TURN_ACCEL))) {
-    continue;
-  }
-  g_accel = -1.0 * TURN_ACCEL;
-
-  while ((getStepR() + getStepL()) < obj_step) {
-    continue;
+  while (1) {
+    stepGet();
+    if ((int)((tread_width * PI / 4.0 * times) - step_lr_len) < (int)(((speed * speed) - (MIN_SPEED * MIN_SPEED)) / (2.0 * 1000.0 * accel))) {
+      break;
+    }
   }
 
-  g_motor_move = 0;
-  delay(300);
+  accel = -1.0 * turn_accel;
+
+  while (1) {
+    stepGet();
+    if (step_lr > obj_step) {
+      break;
+    }
+  }
+  stop();
 }

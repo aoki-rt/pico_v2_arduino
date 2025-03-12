@@ -39,14 +39,6 @@
 #define MAX_SPEED_INIT 600
 #define MIN_SPEED 10
 
-/*
-#define TREAD_CIRCUIT (TREAD_WIDTH * PI / 4)
-#define PULSE (TIRE_DIAMETER * PI / (35.0 / 10.0 * 20.0 * 8.0))
-
-#define CONTROL_TH_SEN_R TH_SEN_R
-#define CONTROL_TH_SEN_L TH_SEN_L
-*/
-
 #define INC_FREQ 3000
 #define DEC_FREQ 2000
 

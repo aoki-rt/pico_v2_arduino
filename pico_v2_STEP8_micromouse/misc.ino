@@ -16,16 +16,6 @@
 
 MISC g_misc;
 
-MISC::MISC()
-{
-  // TODO Auto-generated constructor stub
-}
-
-MISC::~MISC()
-{
-  // TODO Auto-generated destructor stub
-}
-
 short MISC::buttonInc(short data, short limit, short limit_data)
 {
   data++;
