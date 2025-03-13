@@ -215,7 +215,7 @@ unsigned char switchGet(void)
 }
 
 //sensor
-void densorGetS(volatile short * r_value, volatile short * l_value)
+void sensorGetS(volatile short * r_value, volatile short * l_value)
 {
   short temp_r, temp_l;
   temp_r = analogRead(AD3);

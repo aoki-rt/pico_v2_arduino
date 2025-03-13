@@ -314,7 +314,7 @@ void webServerSetup(void) {
 
     Serial.println("saved");
     paramWrite();
-    g_run.pulse = g_run.tire_diameter * PI / (200.0 * microstep);
+    g_run.pulse = g_run.tire_diameter * PI / (35.0 / 10.0 * 20.0 *8.0);
 
     buzzerEnable(INC_FREQ);
     delay(30);

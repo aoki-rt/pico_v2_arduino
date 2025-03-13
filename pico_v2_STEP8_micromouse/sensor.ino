@@ -29,7 +29,7 @@ void SENSOR::interrupt(void)
     case 0:
       sen_r.p_value = sen_r.value;
       sen_l.p_value = sen_l.value;
-      getSensorS(&sen_r.value, &sen_l.value);
+      sensorGetS(&sen_r.value, &sen_l.value);
       if (sen_r.value > sen_r.th_wall) {
         sen_r.is_wall = true;
       } else {
@@ -58,7 +58,7 @@ void SENSOR::interrupt(void)
     case 1:
       sen_fr.p_value = sen_fr.value;
       sen_fl.p_value = sen_fl.value;
-      getSensorF(&g_sen_fr.value, &g_sen_fl.value);
+      sensorGetF(&sen_fr.value, &sen_fl.value);
       if (sen_fr.value > sen_fr.th_wall) {
         sen_fr.is_wall = true;
       } else {
@@ -76,9 +76,9 @@ void SENSOR::interrupt(void)
       }
       battery_value = batteryVoltGet();
       if (((battery_value - BATT_MIN) * 10 / (BATT_MAX - BATT_MIN)) > bled_cnt) {
-        setBLED(1);
+        bledSet(1);
       } else {
-        setBLED(2);
+        bledSet(2);
       }
       if(battery_value < BATT_MIN){
         buzzerEnable(400);

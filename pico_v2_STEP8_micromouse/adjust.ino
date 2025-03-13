@@ -176,7 +176,7 @@ unsigned char ADJUST::modeExec(unsigned char l_mode)
       delay(30);
       buzzerDisable();
       webServerSetup();
-      //webserberでセンサの値のばらつきが大きぎて判断できない時は、webSerberSetup()をコメントアウトしadcView()のコメントをはずし、シリアルモニタで確認してください。
+      //webserverでセンサの値のばらつきが大きすぎて判断できない時は、webServerSetup()をコメントアウトしadcView()のコメントをはずし、シリアルモニタで確認してください。
       //      adcView();
       break;
     case 2:
