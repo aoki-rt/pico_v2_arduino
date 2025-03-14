@@ -17,7 +17,7 @@
 AsyncWebServer server(80);
 
 #ifdef AP_MODE
-const char* ssid = "PICO4";
+const char* ssid = "PICO2";
 const char* password = "12345678";
 #else
 const char* ssid = "使用しているルータのSSID";
@@ -49,7 +49,7 @@ void webServerSetup(void) {
     html += "<html lang=\"en\">";
     html += "<head>";
     html += "<meta charset=\"UTF-8\">";
-    html += "<title>Pi:Co Classic4_WebServer</title>";
+    html += "<title>Pi:Co V2 WebServer</title>";
     html += "<style>";
     html += "  html {";
     html += "    font-family: Helvetica;";
@@ -64,7 +64,7 @@ void webServerSetup(void) {
     html += "  </style>";
     html += "</head>";
     html += "<body>";
-    html += "<h1>Pi:Co Classic4_Parameter</h1>";
+    html += "<h1>Pi:Co V2_Parameter</h1>";
     html += "<form action=\"/get\">";
 
     html += "<p><h2>battery Value</h2></p>";
@@ -124,7 +124,7 @@ void webServerSetup(void) {
     html += "<br>";
 
     html += "<input type=\"submit\" value=\"Save\">";
-    html += "</form><br>";
+//    html += "</form><br>";
 
 
     html += "<br>";

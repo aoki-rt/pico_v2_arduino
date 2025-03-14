@@ -24,6 +24,7 @@ void SENSOR::interrupt(void)
 {
   static char cnt = 0;
   static char bled_cnt = 0;
+  static int low_batt_cnt =0;
 
   switch (cnt) {
     case 0:
@@ -81,8 +82,12 @@ void SENSOR::interrupt(void)
         bledSet(2);
       }
       if(battery_value < BATT_MIN){
-        buzzerEnable(400);
-        ledSet(0);
+        low_batt_cnt++;
+        if(low_batt_cnt>=100){
+          buzzerEnable(400);        
+        }
+      }else{
+        low_batt_cnt=0;
       }
       break;
     default:
