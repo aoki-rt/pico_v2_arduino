@@ -73,7 +73,8 @@ char MapManager::wallDataGet(unsigned char x, unsigned char y, t_global_directio
 }
 
 void MapManager::wallDataSet(
-  unsigned char x, unsigned char y, t_global_direction l_global_dir, char data) {
+  unsigned char x, unsigned char y, t_global_direction l_global_dir, char data)
+{
   switch (l_global_dir) {
     case north:
       wall[x][y].north = data;
@@ -445,7 +446,7 @@ void MapManager::map2Make(int x, int y)
   } while (change_flag == true);
 }
 
-int MapManager::priorityGet(unsigned char x, unsigned char y,  t_global_direction dir)
+int MapManager::priorityGet(unsigned char x, unsigned char y, t_global_direction dir)
 {
   int priority;
 
