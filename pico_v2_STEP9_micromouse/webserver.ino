@@ -155,24 +155,34 @@ void webServerSetup(void) {
 
     html += "<p><h2>Accel Parameter</h2></p>";
     html += "<table align=\"center\">";
-    html += "<tr><th>Search accel</th><td><input name=\"search_acc\" type=\"text\" size=\"10\" value=";
+    html += "<tr><th> </th><th>low</th><th>normal</th><th>high</th></tr>";    
+    html += "<tr><th>Search accel</th><th><input name=\"search_acc_low\" type=\"text\" size=\"10\" value=";
+    html += String(g_run.search_accel_low, 3);
+    html += "></th><th><input name=\"search_acc\" type=\"text\" size=\"10\" value=";
     html += String(g_run.search_accel, 3);
-    html += ">mm</td></tr>";
+    html += "></th><th><input name=\"search_acc_high\" type=\"text\" size=\"10\" value=";
+    html += String(g_run.search_accel_high, 3);
+    html += "></th></tr>";
     html += "<tr><th>Turn accel</th><td><input name=\"turn_acc\" type=\"text\" size=\"10\" value=";
     html += String(g_run.turn_accel, 3);
-    html += ">mm</td></tr>";
+    html += "></td><td>mm/s/s</td><td></td></tr>";
     html += "</table>";
     html += "<br>";
     html += "<br>";
 
     html += "<p><h2>Speed Parameter</h2></p>";
     html += "<table align=\"center\">";
-    html += "<tr><th>Search speed</th><td><input name=\"search_spd\" type=\"text\" size=\"10\" value=";
+    html += "<tr><th> </th><th>low</th><th>normal</th><th>high</th></tr>";  
+    html += "<tr><th>Search speed</th><th><input name=\"search_spd_low\" type=\"text\" size=\"10\" value=";
+    html += String(g_run.search_speed_low);
+    html += "></th><th><input name=\"search_spd\" type=\"text\" size=\"10\" value=";
     html += String(g_run.search_speed);
-    html += ">mm</td></tr>";
+    html += "></th><th><input name=\"search_spd_high\" type=\"text\" size=\"10\" value=";
+    html += String(g_run.search_speed_high);
+    html += "></th></tr>";
     html += "<tr><th>max speed</th><td><input name=\"max_spd\" type=\"text\" size=\"10\" value=";
     html += String(g_run.max_speed);
-    html += ">mm</td></tr>";
+    html += "></td><td>mm/s</td><td></td></tr>";
     html += "</table>";
     html += "<br>";
     html += "<br>";
@@ -302,11 +312,19 @@ void webServerSetup(void) {
 
     inputMessage = request->getParam("search_acc")->value();
     g_run.search_accel = inputMessage.toFloat();
+    inputMessage = request->getParam("search_acc_low")->value();
+    g_run.search_accel_low = inputMessage.toFloat();
+    inputMessage = request->getParam("search_acc_high")->value();
+    g_run.search_accel_high = inputMessage.toFloat();
     inputMessage = request->getParam("turn_acc")->value();
     g_run.turn_accel = inputMessage.toFloat();
 
     inputMessage = request->getParam("search_spd")->value();
     g_run.search_speed = inputMessage.toInt();
+    inputMessage = request->getParam("search_spd_low")->value();
+    g_run.search_speed_low = inputMessage.toInt();
+    inputMessage = request->getParam("search_spd_high")->value();
+    g_run.search_speed_high = inputMessage.toInt();
     inputMessage = request->getParam("max_spd")->value();
     g_run.max_speed = inputMessage.toInt();
 

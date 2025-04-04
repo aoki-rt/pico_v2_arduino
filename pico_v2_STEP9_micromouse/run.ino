@@ -102,13 +102,13 @@ void RUN::stop(void)
   delay(300);
 }
 
-void RUN::straight(int len, int init_speed, int max_sp, int finish_speed)
+void RUN::straight(int len, int init_speed, int max_sp, int finish_speed,float l_accel)
 {
   int obj_step;
 
   controlInterruptStop();
   upper_speed_limit = (double)max_sp;
-  accel = (double)search_accel;
+  accel = (double)l_accel;
 
   if (init_speed < MIN_SPEED) {
     speed = (double)MIN_SPEED;
@@ -136,7 +136,7 @@ void RUN::straight(int len, int init_speed, int max_sp, int finish_speed)
     }
   }
 
-  accel = -1.0 * search_accel;
+  accel = -1.0 * accel;
 
   while (1) {
     stepGet();
@@ -152,12 +152,12 @@ void RUN::straight(int len, int init_speed, int max_sp, int finish_speed)
   }
 }
 
-void RUN::accelerate(int len, int finish_speed)
+void RUN::accelerate(int len, int finish_speed,float l_accel)
 {
   int obj_step;
 
   controlInterruptStop();
-  accel = search_accel;
+  accel = l_accel;
   speed = lower_speed_limit = (double)MIN_SPEED;
   upper_speed_limit = (double)finish_speed;
   con_wall.enable = true;
@@ -202,12 +202,12 @@ void RUN::oneStep(int len, int init_speed)
   stay(init_speed);
 }
 
-void RUN::decelerate(int len, int init_speed)
+void RUN::decelerate(int len, int init_speed,float l_accel)
 {
   int obj_step;
 
   controlInterruptStop();
-  accel = search_accel;
+  accel = l_accel;
   speed = upper_speed_limit = init_speed;
   lower_speed_limit = MIN_SPEED;
   con_wall.enable = true;
@@ -225,7 +225,7 @@ void RUN::decelerate(int len, int init_speed)
     }
   }
 
-  accel = -1 * search_accel;
+  accel = -1 * accel;
 
   while (1) {
     stepGet();

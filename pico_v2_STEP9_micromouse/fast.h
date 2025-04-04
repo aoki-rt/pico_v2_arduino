@@ -18,7 +18,7 @@
 class FAST
 {
 public:
-  void run(short gx, short gy);
+  void run(short gx, short gy,float l_accel, float l_speed);
 
 private:
 };

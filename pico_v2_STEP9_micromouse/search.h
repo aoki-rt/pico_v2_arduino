@@ -18,7 +18,7 @@
 class SEARCH {
 public:
 	void lefthand(void);
-	void adachi(char gx, char gy);
+	void adachi(char gx, char gy,float l_accel, float l_speed);
 private:
 
 };

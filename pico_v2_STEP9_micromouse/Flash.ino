@@ -51,9 +51,17 @@ void flashInit(void)
 
   cmd_tmp = "search_accel " + String(SEARCH_ACCEL_INIT) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
+  cmd_tmp = "search_accel_low " + String(SEARCH_ACCEL_LOW_INIT) + '\n';
+  appendFile(SPIFFS, file_tmp, cmd_tmp);
+  cmd_tmp = "search_accel_high " + String(SEARCH_ACCEL_HIGH_INIT) + '\n';
+  appendFile(SPIFFS, file_tmp, cmd_tmp);
   cmd_tmp = "turn_accel " + String(TURN_ACCEL_INIT) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
   cmd_tmp = "search_speed " + String(SEARCH_SPEED_INIT) + '\n';
+  appendFile(SPIFFS, file_tmp, cmd_tmp);
+  cmd_tmp = "search_speed_low " + String(SEARCH_SPEED_LOW_INIT) + '\n';
+  appendFile(SPIFFS, file_tmp, cmd_tmp);
+  cmd_tmp = "search_speed_high " + String(SEARCH_SPEED_HIGH_INIT) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
   cmd_tmp = "max_speed " + String(MAX_SPEED_INIT) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
@@ -197,9 +205,17 @@ void paramWrite(void)
 
   cmd_tmp = "search_accel " + String(g_run.search_accel) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
+  cmd_tmp = "search_accel_low " + String(g_run.search_accel_low) + '\n';
+  appendFile(SPIFFS, file_tmp, cmd_tmp);
+  cmd_tmp = "search_accel_high " + String(g_run.search_accel_high) + '\n';
+  appendFile(SPIFFS, file_tmp, cmd_tmp);
   cmd_tmp = "turn_accel " + String(g_run.turn_accel) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
   cmd_tmp = "search_speed " + String(g_run.search_speed) + '\n';
+  appendFile(SPIFFS, file_tmp, cmd_tmp);
+  cmd_tmp = "search_speed_low " + String(g_run.search_speed_low) + '\n';
+  appendFile(SPIFFS, file_tmp, cmd_tmp);
+  cmd_tmp = "search_speed_high " + String(g_run.search_speed_high) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
   cmd_tmp = "max_speed " + String(g_run.max_speed) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
@@ -259,10 +275,18 @@ void paramRead(void)
 
     } else if (cmds[0].equals("search_accel")) {
       g_run.search_accel = cmds[1].toFloat();
+    } else if (cmds[0].equals("search_accel_low")) {
+      g_run.search_accel_low = cmds[1].toFloat();
+    } else if (cmds[0].equals("search_accel_high")) {
+      g_run.search_accel_high = cmds[1].toFloat();
     } else if (cmds[0].equals("turn_accel")) {
       g_run.turn_accel = cmds[1].toFloat();
     } else if (cmds[0].equals("search_speed")) {
       g_run.search_speed = cmds[1].toInt();
+    } else if (cmds[0].equals("search_speed_low")) {
+      g_run.search_speed_low = cmds[1].toInt();
+    } else if (cmds[0].equals("search_speed_high")) {
+      g_run.search_speed_high = cmds[1].toInt();
     } else if (cmds[0].equals("max_speed")) {
       g_run.max_speed = cmds[1].toInt();
 

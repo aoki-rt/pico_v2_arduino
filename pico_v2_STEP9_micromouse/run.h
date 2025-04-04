@@ -46,7 +46,11 @@ public:
   volatile double upper_speed_limit;
   volatile double lower_speed_limit;
   float search_accel;
+  float search_accel_low;
+  float search_accel_high;
   short search_speed;
+  short search_speed_low;
+  short search_speed_high;
   short max_speed;
   float turn_accel;
   t_control con_wall;
@@ -58,10 +62,10 @@ public:
   RUN();
   void interrupt(void);
   void counterClear(void);
-  void straight(int len, int init_speed, int max_sp, int finish_speed);
-  void accelerate(int len, int finish_speed);
+  void straight(int len, int init_speed, int max_sp, int finish_speed,float l_accel);
+  void accelerate(int len, int finish_speed,float l_accel);
   void oneStep(int len, int init_speed);
-  void decelerate(int len, int init_speed);
+  void decelerate(int len, int init_speed,float l_accel);
   void rotate(t_local_direction dir, int times);
 
 private:

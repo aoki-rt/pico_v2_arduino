@@ -111,12 +111,12 @@ void ADJUST::straightCheck(int section_check)
 {
   motorEnable();
   delay(1000);
-  g_run.accelerate(HALF_SECTION, g_run.search_speed);
+  g_run.accelerate(HALF_SECTION, g_run.search_speed,g_run.search_accel);
   if (section_check > 1) {
     g_run.straight(
-      SECTION * (section_check - 1), g_run.search_speed, g_run.max_speed, g_run.search_speed);
+      SECTION * (section_check - 1), g_run.search_speed, g_run.max_speed, g_run.search_speed,g_run.search_accel);
   }
-  g_run.decelerate(HALF_SECTION, g_run.search_speed);
+  g_run.decelerate(HALF_SECTION, g_run.search_speed,g_run.search_accel);
 
   motorDisable();
 }

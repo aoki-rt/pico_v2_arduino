@@ -16,7 +16,7 @@
 
 FAST g_fast;
 
-void FAST::run(short gx, short gy)
+void FAST::run(short gx, short gy,float l_accel, float l_speed)
 {
   t_global_direction glob_nextdir;
   int straight_count = 0;
@@ -35,7 +35,7 @@ void FAST::run(short gx, short gy)
       break;
   }
 
-  g_run.accelerate(HALF_SECTION, g_run.search_speed);
+  g_run.accelerate(HALF_SECTION, l_speed,l_accel);
   straight_count = 0;
   g_map.mypos.dir = glob_nextdir;
   g_map.axisUpdate();
@@ -48,22 +48,22 @@ void FAST::run(short gx, short gy)
       case right:
         if (straight_count > 0) {
           g_run.straight(
-            straight_count * SECTION, g_run.search_speed, g_run.max_speed, g_run.search_speed);
+            straight_count * SECTION, l_accel, g_run.max_speed, l_speed,l_accel);
           straight_count = 0;
         }
-        g_run.decelerate(HALF_SECTION, g_run.search_speed);
+        g_run.decelerate(HALF_SECTION, l_speed,l_accel);
         g_run.rotate(right, 1);
-        g_run.accelerate(HALF_SECTION, g_run.search_speed);
+        g_run.accelerate(HALF_SECTION, l_speed,l_accel);
         break;
       case left:
         if (straight_count > 0) {
           g_run.straight(
-            straight_count * SECTION, g_run.search_speed, g_run.max_speed, g_run.search_speed);
+            straight_count * SECTION,l_accel, g_run.max_speed, l_speed,l_accel);
           straight_count = 0;
         }
-        g_run.decelerate(HALF_SECTION, g_run.search_speed);
+        g_run.decelerate(HALF_SECTION, l_speed,l_accel);
         g_run.rotate(left, 1);
-        g_run.accelerate(HALF_SECTION, g_run.search_speed);
+        g_run.accelerate(HALF_SECTION, l_speed,l_accel);
         break;
       default:
         break;
@@ -73,7 +73,7 @@ void FAST::run(short gx, short gy)
   }
   if (straight_count > 0) {
     g_run.straight(
-      straight_count * SECTION, g_run.search_speed, g_run.max_speed, g_run.search_speed);
+      straight_count * SECTION, l_accel, g_run.max_speed,l_speed,l_accel);
   }
-  g_run.decelerate(HALF_SECTION, g_run.search_speed);
+  g_run.decelerate(HALF_SECTION, l_speed,l_accel);
 }

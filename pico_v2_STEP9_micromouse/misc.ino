@@ -75,36 +75,57 @@ void MISC::modeExec(int mode)
     case 1:
       g_search.lefthand();
       break;
-    case 2:  //足立法
+    case 2:  //足立法-low
       g_map.positionInit();
-      g_search.adachi(g_map.goal_mx, g_map.goal_my);
+      g_search.adachi(g_map.goal_mx, g_map.goal_my,g_run.search_accel_low,g_run.search_speed_low);
       g_run.rotate(right, 2);
       g_map.nextDir(right);
       g_map.nextDir(right);
       g_misc.goalAppeal();
-      g_search.adachi(0, 0);
+      g_search.adachi(0, 0,g_run.search_accel_low,g_run.search_speed_low);
       g_run.rotate(right, 2);
       g_map.nextDir(right);
       g_map.nextDir(right);
       mapWrite();
       break;
-    case 3:  //最短走行
-      mapCopy();
+    case 3:  //足立法-normal
       g_map.positionInit();
-      g_fast.run(g_map.goal_mx, g_map.goal_my);
+      g_search.adachi(g_map.goal_mx, g_map.goal_my,g_run.search_accel,g_run.search_speed);
       g_run.rotate(right, 2);
       g_map.nextDir(right);
       g_map.nextDir(right);
       g_misc.goalAppeal();
-      g_fast.run(0, 0);
+      g_search.adachi(0, 0,g_run.search_accel,g_run.search_speed);
+      g_run.rotate(right, 2);
+      g_map.nextDir(right);
+      g_map.nextDir(right);
+      mapWrite();
+      break;
+    case 4:  //最短走行-normal
+      mapCopy();
+      g_map.positionInit();
+      g_fast.run(g_map.goal_mx, g_map.goal_my,g_run.search_accel,g_run.search_speed);
+      g_run.rotate(right, 2);
+      g_map.nextDir(right);
+      g_map.nextDir(right);
+      g_misc.goalAppeal();
+      g_fast.run(0, 0,g_run.search_accel,g_run.search_speed);
       g_run.rotate(right, 2);
       g_map.nextDir(right);
       g_map.nextDir(right);
       break;
-    case 4:
-      break;
-    case 5:
-      break;
+    case 5:  //最短走行-high
+      mapCopy();
+      g_map.positionInit();
+      g_fast.run(g_map.goal_mx, g_map.goal_my,g_run.search_accel_high,g_run.search_speed_high);
+      g_run.rotate(right, 2);
+      g_map.nextDir(right);
+      g_map.nextDir(right);
+      g_misc.goalAppeal();
+      g_fast.run(0, 0,g_run.search_accel,g_run.search_speed);
+      g_run.rotate(right, 2);
+      g_map.nextDir(right);
+      g_map.nextDir(right);
     case 6:
       break;
     case 7:
