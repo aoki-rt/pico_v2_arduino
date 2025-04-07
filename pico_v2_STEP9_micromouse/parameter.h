@@ -48,7 +48,7 @@
 #define DEC_FREQ 2000
 
 #define BATT_MAX 4000
-#define BATT_MIN 3400
+#define BATT_MIN 3250
 
 #define HALF_SECTION 45
 #define SECTION 90

@@ -41,6 +41,9 @@ void setup()
   buzzerDisable();
 
   g_misc.mode_select = 1;
+
+
+
 }
 
 void loop()
