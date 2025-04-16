@@ -40,7 +40,7 @@ typedef enum {
   shortcut_right,
   shortcut_left,
   shortcut_rear,
-  loca_dir_error  
+  loca_dir_error
 } t_local_direction;
 
 typedef enum { north, east, south, west, glob_dir_error } t_global_direction;

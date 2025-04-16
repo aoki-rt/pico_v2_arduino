@@ -316,90 +316,10 @@ t_local_direction MapManager::nextDirGet(char x, char y, t_global_direction * p_
       ledSet(0x05);
       delay(500);
     }
-  }else if(priority < 4){
-    switch (*p_global_dir) {           //next
-      case north:
-        switch (mypos.dir) {  //now
-          case north:
-            return shortcut_front;
-            break;
-          case east:
-            return shortcut_left;
-            break;
-          case south:
-            return shortcut_rear;
-            break;
-          case west:
-            return shortcut_right;
-            break;
-          default:
-            return loca_dir_error;
-            break;
-        }
-        break;
-      case east:
-        switch (mypos.dir) {
-          case east:
-            return shortcut_front;
-            break;
-          case south:
-            return shortcut_left;
-            break;
-          case west:
-            return shortcut_rear;
-            break;
-          case north:
-            return shortcut_right;
-            break;
-          default:
-            return loca_dir_error;
-            break;
-        }
-        break;
-      case south:
-        switch (mypos.dir) {
-          case south:
-            return shortcut_front;
-            break;
-          case west:
-            return shortcut_left;
-            break;
-          case north:
-            return shortcut_rear;
-            break;
-          case east:
-            return shortcut_right;
-            break;
-          default:
-            return loca_dir_error;
-            break;
-        }
-        break;
-      case west:
-        switch (mypos.dir) {
-          case west:
-            return shortcut_front;
-            break;
-          case north:
-            return shortcut_left;
-            break;
-          case east:
-            return shortcut_rear;
-            break;
-          case south:
-            return shortcut_right;
-            break;
-          default:
-            return loca_dir_error;
-            break;
-        }
-        break;
-      default:
-        return loca_dir_error;
-        break;
-    }    
   } else {
-    return nextGdir(p_global_dir);
+    return (
+      t_local_direction)((int)nextGdir(p_global_dir) 
+                         + ((priority < 4) ? (int)shortcut_front : (int)front));
   }
 
   return front;

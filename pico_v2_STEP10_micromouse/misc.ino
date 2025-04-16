@@ -68,6 +68,7 @@ void MISC::goalAppeal(void)  //ゴールしたことをアピールする
 
 void MISC::modeExec(int mode)
 {
+  short max_speed_tmp;
   motorEnable();
   delay(1000);
 
@@ -76,40 +77,46 @@ void MISC::modeExec(int mode)
       g_search.lefthand();
       break;
     case 2:  //足立法-low
+      max_speed_tmp = g_run.max_speed;
+      g_run.max_speed = g_run.search_speed;
       g_map.positionInit();
-      g_search.adachi(g_map.goal_mx, g_map.goal_my,g_run.search_accel_low,g_run.search_speed_low);
+      g_search.adachi(g_map.goal_mx, g_map.goal_my, g_run.search_accel_low, g_run.search_speed_low);
       g_run.rotate(right, 2);
       g_map.nextDir(right);
       g_map.nextDir(right);
       g_misc.goalAppeal();
-      g_search.adachi(0, 0,g_run.search_accel_low,g_run.search_speed_low);
+      g_search.adachi(0, 0, g_run.search_accel_low, g_run.search_speed_low);
       g_run.rotate(right, 2);
       g_map.nextDir(right);
       g_map.nextDir(right);
       mapWrite();
+      g_run.max_speed = max_speed_tmp;
       break;
     case 3:  //足立法-normal
+      max_speed_tmp = g_run.max_speed;
+      g_run.max_speed = (g_run.search_speed + g_run.max_speed) / 2;
       g_map.positionInit();
-      g_search.adachi(g_map.goal_mx, g_map.goal_my,g_run.search_accel,g_run.search_speed);
+      g_search.adachi(g_map.goal_mx, g_map.goal_my, g_run.search_accel, g_run.search_speed);
       g_run.rotate(right, 2);
       g_map.nextDir(right);
       g_map.nextDir(right);
       g_misc.goalAppeal();
-      g_search.adachi(0, 0,g_run.search_accel,g_run.search_speed);
+      g_search.adachi(0, 0, g_run.search_accel, g_run.search_speed);
       g_run.rotate(right, 2);
       g_map.nextDir(right);
       g_map.nextDir(right);
       mapWrite();
+      g_run.max_speed = max_speed_tmp;
       break;
     case 4:  //最短走行-normal
       mapCopy();
       g_map.positionInit();
-      g_fast.run(g_map.goal_mx, g_map.goal_my,g_run.search_accel,g_run.search_speed);
+      g_fast.run(g_map.goal_mx, g_map.goal_my, g_run.search_accel, g_run.search_speed);
       g_run.rotate(right, 2);
       g_map.nextDir(right);
       g_map.nextDir(right);
       g_misc.goalAppeal();
-      g_fast.run(0, 0,g_run.search_accel,g_run.search_speed);
+      g_fast.run(0, 0, g_run.search_accel, g_run.search_speed);
       g_run.rotate(right, 2);
       g_map.nextDir(right);
       g_map.nextDir(right);
@@ -117,12 +124,12 @@ void MISC::modeExec(int mode)
     case 5:  //最短走行-high
       mapCopy();
       g_map.positionInit();
-      g_fast.run(g_map.goal_mx, g_map.goal_my,g_run.search_accel_high,g_run.search_speed_high);
+      g_fast.run(g_map.goal_mx, g_map.goal_my, g_run.search_accel_high, g_run.search_speed_high);
       g_run.rotate(right, 2);
       g_map.nextDir(right);
       g_map.nextDir(right);
       g_misc.goalAppeal();
-      g_fast.run(0, 0,g_run.search_accel,g_run.search_speed);
+      g_fast.run(0, 0, g_run.search_accel, g_run.search_speed);
       g_run.rotate(right, 2);
       g_map.nextDir(right);
       g_map.nextDir(right);
