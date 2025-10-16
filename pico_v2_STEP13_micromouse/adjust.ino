@@ -194,15 +194,29 @@ unsigned char ADJUST::modeExec(unsigned char l_mode)
     case 5:
       motorEnable();
       delay(1000);
-      g_run.accelerate(HALF_SECTION, g_run.search_speed,g_run.search_accel);
-      g_run.sura(right,g_run.search_speed);
-      g_run.decelerate(HALF_SECTION, g_run.search_speed,g_run.search_accel);
+      g_run.accelerate(HALF_SECTION, g_run.search_speed-25,g_run.search_accel);
+      g_run.sura(right,g_run.search_speed-25);
+      g_run.decelerate(HALF_SECTION, g_run.search_speed-25,g_run.search_accel);
       motorDisable();
       break;
 
     case 6:
+      motorEnable();
+      delay(1000);
+      g_run.accelerate(HALF_SECTION, g_run.search_speed_high-25,g_run.search_accel_high);
+      g_run.sura(right,g_run.search_speed_high-25);
+      g_run.decelerate(HALF_SECTION, g_run.search_speed_high-25,g_run.search_accel_high);
+      motorDisable();     
       break;
-
+/*
+      motorEnable();
+      delay(1000);
+      g_run.accelerate(HALF_SECTION, g_run.search_speed_low-25,g_run.search_accel_low);
+      g_run.sura(right,g_run.search_speed_low-25);
+      g_run.decelerate(HALF_SECTION, g_run.search_speed_low-25,g_run.search_accel_low);
+      motorDisable();     
+      break;
+*/
     default:
       return 1;
       break;

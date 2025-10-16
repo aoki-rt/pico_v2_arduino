@@ -114,9 +114,7 @@ void FAST::runSura(short gx, short gy,float l_accel, float l_speed)
             straight_count * SECTION, l_speed, g_run.max_speed, l_speed,l_accel);
           straight_count = 0;
         }
-        g_run.decelerate(HALF_SECTION, l_speed,l_accel);
-        g_run.rotate(right, 1);
-        g_run.accelerate(HALF_SECTION, l_speed,l_accel);
+        g_run.sura(right, l_speed);
         break;
       case left:
         if (straight_count > 0) {
@@ -124,9 +122,7 @@ void FAST::runSura(short gx, short gy,float l_accel, float l_speed)
             straight_count * SECTION,l_speed, g_run.max_speed, l_speed,l_accel);
           straight_count = 0;
         }
-        g_run.decelerate(HALF_SECTION, l_speed,l_accel);
-        g_run.rotate(left, 1);
-        g_run.accelerate(HALF_SECTION, l_speed,l_accel);
+        g_run.sura(left, l_speed);
         break;
       default:
         break;

@@ -166,8 +166,30 @@ void MISC::modeExec(int mode)
       g_run.max_speed = max_speed_tmp;
       break;
     case 8:
+      mapCopy();
+      g_map.positionInit();
+      g_fast.runSura(g_map.goal_mx, g_map.goal_my, g_run.search_accel, g_run.search_speed-25);
+      g_run.rotate(right, 2);
+      g_map.nextDir(right);
+      g_map.nextDir(right);
+      g_misc.goalAppeal();
+      g_fast.runSura(0, 0, g_run.search_accel, g_run.search_speed-25);
+      g_run.rotate(right, 2);
+      g_map.nextDir(right);
+      g_map.nextDir(right);
       break;
     case 9:
+      mapCopy();
+      g_map.positionInit();
+      g_fast.runSura(g_map.goal_mx, g_map.goal_my, g_run.search_accel_high, g_run.search_speed_high-25);
+      g_run.rotate(right, 2);
+      g_map.nextDir(right);
+      g_map.nextDir(right);
+      g_misc.goalAppeal();
+      g_fast.runSura(0, 0, g_run.search_accel, g_run.search_speed-25);
+      g_run.rotate(right, 2);
+      g_map.nextDir(right);
+      g_map.nextDir(right);
       break;
     case 10:
       break;

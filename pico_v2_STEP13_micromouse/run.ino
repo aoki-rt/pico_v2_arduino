@@ -293,29 +293,37 @@ void RUN::rotate(t_local_direction dir, int times)
 
 #define pre_st_low 10.0
 #define pre_st_nor 10.0
+#define pre_st_high 10.0
 
 void RUN::sura(t_local_direction dir,int init_speed)
 {
 
-  if(init_speed==search_speed_low){
+  if(init_speed==(search_speed_low-25)){
     oneStep(pre_st_low,init_speed);
-  }else{
+  }else if(init_speed==(search_speed-25)){
     oneStep(pre_st_nor-5,init_speed);
+  }else{
+    oneStep(pre_st_high-5,init_speed);
   }
 
   int obj_step;
   controlInterruptStop();
   accel = 0.0;//円弧で旋回するので加減速はしなし
-  if(init_speed==search_speed_low){
+  if(init_speed==(search_speed_low-25)){
     omega = init_speed/(45.0f-(float)pre_st_low);
     upper_speed_limit = omega*(45.0f-(float)pre_st_low + tread_width/2.0f);
     lower_speed_limit = omega*(45.0f-(float)pre_st_low - tread_width/2.0f);
     obj_step = (int)((45.0f-(float)pre_st_low) * PI / pulse)-0;//<=旋回角度はここで調整する
-  }else{
+  }else if(init_speed==(search_speed-25)){
     omega = init_speed/(45.0f-(float)pre_st_nor);
     upper_speed_limit = omega*(45.0f-(float)pre_st_nor + tread_width/2.0f);
     lower_speed_limit = omega*(45.0f-(float)pre_st_nor - tread_width/2.0f);
     obj_step = (int)((45.0f-(float)pre_st_nor) * PI / pulse)-0;//<=旋回角度はここで調整する
+  }else{
+    omega = init_speed/(45.0f-(float)pre_st_high);
+    upper_speed_limit = omega*(45.0f-(float)pre_st_high + tread_width/2.0f);
+    lower_speed_limit = omega*(45.0f-(float)pre_st_high - tread_width/2.0f);
+    obj_step = (int)((45.0f-(float)pre_st_high) * PI / pulse)-0;//<=旋回角度はここで調整する
   }
   
   speed = init_speed;
@@ -336,8 +344,10 @@ void RUN::sura(t_local_direction dir,int init_speed)
 
   if(init_speed==search_speed_low){
     oneStep(pre_st_low,init_speed);
-  }else{
+  }else if(init_speed==search_speed){
     oneStep(pre_st_nor,init_speed);
+  }else{
+    oneStep(pre_st_high,init_speed);
   }
 }
 
