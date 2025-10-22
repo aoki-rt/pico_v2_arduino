@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "fast.h"
 #include "misc.h"
 #include "sensor.h"
 
@@ -32,26 +33,25 @@ short MISC::buttonInc(short data, short limit, short limit_data)
 
 void MISC::buttonOk(void)
 {
-  while(1){
+  while (1) {
     ledSet(0x0f);
     delay(500);
-    if((g_sensor.sen_fr.value+g_sensor.sen_fl.value)>2000){
-      break;      
+    if ((g_sensor.sen_fr.value + g_sensor.sen_fl.value) > 2000) {
+      break;
     }
     ledSet(0x00);
     delay(500);
-    if((g_sensor.sen_fr.value+g_sensor.sen_fl.value)>2000){
-      break;      
+    if ((g_sensor.sen_fr.value + g_sensor.sen_fl.value) > 2000) {
+      break;
     }
   }
-  ledSet(0x00);  
+  ledSet(0x00);
 
   buzzerEnable(DEC_FREQ);
   delay(80);
   buzzerEnable(INC_FREQ);
   delay(80);
-  buzzerDisable();  
-  
+  buzzerDisable();
 }
 
 void MISC::goalAppeal(void)  //ゴールしたことをアピールする
@@ -154,12 +154,13 @@ void MISC::modeExec(int mode)
       max_speed_tmp = g_run.max_speed;
       g_run.max_speed = g_run.search_speed;
       g_map.positionInit();
-      g_search.adachi_sura(g_map.goal_mx, g_map.goal_my, g_run.search_accel_low, g_run.search_speed_low-25);
+      g_search.adachi_sura(
+        g_map.goal_mx, g_map.goal_my, g_run.search_accel_low, g_run.search_speed_low - 25);
       g_run.rotate(right, 2);
       g_map.nextDir(right);
       g_map.nextDir(right);
       g_misc.goalAppeal();
-      g_search.adachi_sura(0, 0, g_run.search_accel_low, g_run.search_speed_low-25);
+      g_search.adachi_sura(0, 0, g_run.search_accel_low, g_run.search_speed_low - 25);
       g_run.rotate(right, 2);
       g_map.nextDir(right);
       g_map.nextDir(right);
@@ -170,12 +171,13 @@ void MISC::modeExec(int mode)
       max_speed_tmp = g_run.max_speed;
       g_run.max_speed = (g_run.search_speed + g_run.max_speed) / 2;
       g_map.positionInit();
-      g_search.adachi_sura(g_map.goal_mx, g_map.goal_my, g_run.search_accel, g_run.search_speed-25);
+      g_search.adachi_sura(
+        g_map.goal_mx, g_map.goal_my, g_run.search_accel, g_run.search_speed - 25);
       g_run.rotate(right, 2);
       g_map.nextDir(right);
       g_map.nextDir(right);
       g_misc.goalAppeal();
-      g_search.adachi_sura(0, 0, g_run.search_accel, g_run.search_speed-25);
+      g_search.adachi_sura(0, 0, g_run.search_accel, g_run.search_speed - 25);
       g_run.rotate(right, 2);
       g_map.nextDir(right);
       g_map.nextDir(right);
@@ -185,12 +187,12 @@ void MISC::modeExec(int mode)
     case 8:
       mapCopy();
       g_map.positionInit();
-      g_fast.runSura(g_map.goal_mx, g_map.goal_my, g_run.search_accel, g_run.search_speed-25);
+      g_fast.runSura(g_map.goal_mx, g_map.goal_my, g_run.search_accel, g_run.search_speed - 25);
       g_run.rotate(right, 2);
       g_map.nextDir(right);
       g_map.nextDir(right);
       g_misc.goalAppeal();
-      g_fast.runSura(0, 0, g_run.search_accel, g_run.search_speed-25);
+      g_fast.runSura(0, 0, g_run.search_accel, g_run.search_speed - 25);
       g_run.rotate(right, 2);
       g_map.nextDir(right);
       g_map.nextDir(right);
@@ -198,12 +200,13 @@ void MISC::modeExec(int mode)
     case 9:
       mapCopy();
       g_map.positionInit();
-      g_fast.runSura(g_map.goal_mx, g_map.goal_my, g_run.search_accel_high, g_run.search_speed_high-25);
+      g_fast.runSura(
+        g_map.goal_mx, g_map.goal_my, g_run.search_accel_high, g_run.search_speed_high - 25);
       g_run.rotate(right, 2);
       g_map.nextDir(right);
       g_map.nextDir(right);
       g_misc.goalAppeal();
-      g_fast.runSura(0, 0, g_run.search_accel, g_run.search_speed-25);
+      g_fast.runSura(0, 0, g_run.search_accel, g_run.search_speed - 25);
       g_run.rotate(right, 2);
       g_map.nextDir(right);
       g_map.nextDir(right);
@@ -217,6 +220,18 @@ void MISC::modeExec(int mode)
     case 13:
       break;
     case 14:
+      g_fast.patternMake(g_map.goal_mx, g_map.goal_my);
+      for (int i = 0; i < 256; i++) {
+        Serial.print(g_fast.second_pattern[i++]);
+        Serial.print(" ");
+        if (g_fast.second_pattern[i] == 127) {
+          Serial.println(g_fast.second_pattern[i]);
+          break;
+        } else {
+          Serial.println(g_fast.second_pattern[i++]);
+        }
+      }
+
       break;
     case 15:
       motorDisable();
