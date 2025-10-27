@@ -12,28 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef SRC_FAST_H_
-#define SRC_FAST_H_
+#ifndef SRC_ADJUST_H_
+#define SRC_ADJUST_H_
 
-typedef enum {
-  R90,
-  L90,
-  EOF127
-} t_sura_mode;
-
-
-class FAST
+class ADJUST
 {
 public:
-  void run(short gx, short gy,float l_accel, float l_speed);
-  void runSura(short gx, short gy,float l_accel, float l_speed);
-  void patternMake(short gx, short gy);
-  void runSecond(float l_accel, float l_speed);
-  void runPatternSura(short gx, short gy,float l_accel, float l_speed);
-  unsigned char second_pattern[256];
-private:
+  void menu(void);
+  void mapView(void);
+  void adcView(void);
+  void straightCheck(int section_check);
+  void rotationCheck(void);
+  unsigned char modeExec(unsigned char _mode);
 };
 
-extern FAST g_fast;
+extern ADJUST g_adjust;
 
-#endif /* SRC_FAST_H_ */
+#endif /* SRC_ADJUST_H_ */

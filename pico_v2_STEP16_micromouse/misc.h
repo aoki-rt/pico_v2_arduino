@@ -12,28 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef SRC_FAST_H_
-#define SRC_FAST_H_
+#ifndef SRC_MISC_H_
+#define SRC_MISC_H_
 
-typedef enum {
-  R90,
-  L90,
-  EOF127
-} t_sura_mode;
-
-
-class FAST
+class MISC
 {
 public:
-  void run(short gx, short gy,float l_accel, float l_speed);
-  void runSura(short gx, short gy,float l_accel, float l_speed);
-  void patternMake(short gx, short gy);
-  void runSecond(float l_accel, float l_speed);
-  void runPatternSura(short gx, short gy,float l_accel, float l_speed);
-  unsigned char second_pattern[256];
-private:
+  unsigned char mode_select;
+  void modeExec(int mode);
+  short buttonInc(short _data, short limit, short limit_data);
+  void buttonOk(void);
+  void goalAppeal(void);
+  void errorAppeal(void);
 };
 
-extern FAST g_fast;
+extern MISC g_misc;
 
-#endif /* SRC_FAST_H_ */
+#endif /* SRC_MISC_H_ */

@@ -12,28 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef SRC_FAST_H_
-#define SRC_FAST_H_
+#ifndef DEVICE_H_
+#define DEVICE_H_
 
-typedef enum {
-  R90,
-  L90,
-  EOF127
-} t_sura_mode;
+#define SW_LM 1
+//#define SW_CM 2
+#define SW_RM 4
 
+#define LED0 42
+#define LED1 41
+#define LED2 15
+#define LED3 16
 
-class FAST
-{
-public:
-  void run(short gx, short gy,float l_accel, float l_speed);
-  void runSura(short gx, short gy,float l_accel, float l_speed);
-  void patternMake(short gx, short gy);
-  void runSecond(float l_accel, float l_speed);
-  void runPatternSura(short gx, short gy,float l_accel, float l_speed);
-  unsigned char second_pattern[256];
-private:
-};
+#define BLED0 18
+#define BLED1 17
 
-extern FAST g_fast;
+#define SW_L 13
+#define SW_R 14
 
-#endif /* SRC_FAST_H_ */
+#define SLED_F 2
+#define SLED_S 1
+
+#define BUZZER 40
+
+#define AD4 5
+#define AD3 4
+#define AD2 7
+#define AD1 6
+#define AD0 8
+
+#define MOTOR_EN 12
+#define CW_R 21
+#define CW_L 11
+#define PWM_R 45
+#define PWM_L 46
+
+#endif  // DEVICE_H_

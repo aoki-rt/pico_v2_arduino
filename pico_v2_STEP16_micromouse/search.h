@@ -11,29 +11,17 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-#ifndef SRC_FAST_H_
-#define SRC_FAST_H_
-
-typedef enum {
-  R90,
-  L90,
-  EOF127
-} t_sura_mode;
+#ifndef SRC_SEARCH_H_
+#define SRC_SEARCH_H_
 
 
-class FAST
-{
+class SEARCH {
 public:
-  void run(short gx, short gy,float l_accel, float l_speed);
-  void runSura(short gx, short gy,float l_accel, float l_speed);
-  void patternMake(short gx, short gy);
-  void runSecond(float l_accel, float l_speed);
-  void runPatternSura(short gx, short gy,float l_accel, float l_speed);
-  unsigned char second_pattern[256];
+	void lefthand(void);
+	void adachi(char gx, char gy,float l_accel, float l_speed);
+	void adachi_sura(char gx, char gy,float l_accel, float l_speed);
 private:
+
 };
-
-extern FAST g_fast;
-
-#endif /* SRC_FAST_H_ */
+extern SEARCH g_search;
+#endif /* SRC_SEARCH_H_ */

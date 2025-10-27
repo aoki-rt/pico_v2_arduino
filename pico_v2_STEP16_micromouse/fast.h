@@ -28,7 +28,6 @@ public:
   void run(short gx, short gy,float l_accel, float l_speed);
   void runSura(short gx, short gy,float l_accel, float l_speed);
   void patternMake(short gx, short gy);
-  void runSecond(float l_accel, float l_speed);
   void runPatternSura(short gx, short gy,float l_accel, float l_speed);
   unsigned char second_pattern[256];
 private:
