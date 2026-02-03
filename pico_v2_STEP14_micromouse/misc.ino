@@ -228,7 +228,7 @@ void MISC::modeExec(int mode)
           Serial.println(g_fast.second_pattern[i]);
           break;
         } else {
-          Serial.println(g_fast.second_pattern[i++]);
+          Serial.println(g_fast.second_pattern[i]);
         }
       }
 

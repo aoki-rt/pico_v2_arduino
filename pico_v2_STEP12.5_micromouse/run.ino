@@ -297,7 +297,7 @@ void RUN::rotate(t_local_direction dir, int times)
 void RUN::sura(t_local_direction dir,int init_speed)
 {
 
-  if(init_speed==search_speed_low){
+  if(init_speed==search_speed_low-25){
     oneStep(pre_st_low,init_speed);
   }else{
     oneStep(pre_st_nor-5,init_speed);
@@ -334,7 +334,7 @@ void RUN::sura(t_local_direction dir,int init_speed)
   }
   stay(init_speed);
 
-  if(init_speed==search_speed_low){
+  if(init_speed==search_speed_low-25){
     oneStep(pre_st_low,init_speed);
   }else{
     oneStep(pre_st_nor,init_speed);

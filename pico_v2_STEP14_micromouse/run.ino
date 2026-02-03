@@ -342,9 +342,9 @@ void RUN::sura(t_local_direction dir,int init_speed)
   }
   stay(init_speed);
 
-  if(init_speed==search_speed_low){
+  if(init_speed==search_speed_low-25){
     oneStep(pre_st_low,init_speed);
-  }else if(init_speed==search_speed){
+  }else if(init_speed==search_speed-25){
     oneStep(pre_st_nor,init_speed);
   }else{
     oneStep(pre_st_high,init_speed);
