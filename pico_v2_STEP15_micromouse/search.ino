@@ -77,7 +77,7 @@ void SEARCH::adachi(char gx, char gy, float l_accel, float l_speed)
     switch (g_map.nextDirGet(gx, gy, &glob_nextdir)) {
       case front:
         if (straight_count > 0) {
-          g_run.straight(straight_count * SECTION, l_accel, g_run.max_speed, l_speed, l_accel);
+          g_run.straight(straight_count * SECTION, l_speed, g_run.max_speed, l_speed, l_accel);
           straight_count = 0;
         }
         g_run.oneStep(SECTION, l_speed);
@@ -85,7 +85,7 @@ void SEARCH::adachi(char gx, char gy, float l_accel, float l_speed)
       case shortcut_right:
       case right:
         if (straight_count > 0) {
-          g_run.straight(straight_count * SECTION, l_accel, g_run.max_speed, l_speed, l_accel);
+          g_run.straight(straight_count * SECTION, l_speed, g_run.max_speed, l_speed, l_accel);
           straight_count = 0;
         }
         g_run.decelerate(HALF_SECTION, l_speed, l_accel);
@@ -95,7 +95,7 @@ void SEARCH::adachi(char gx, char gy, float l_accel, float l_speed)
       case shortcut_left:
       case left:
         if (straight_count > 0) {
-          g_run.straight(straight_count * SECTION, l_accel, g_run.max_speed, l_speed, l_accel);
+          g_run.straight(straight_count * SECTION, l_speed, g_run.max_speed, l_speed, l_accel);
           straight_count = 0;
         }
         g_run.decelerate(HALF_SECTION, l_speed, l_accel);
@@ -105,7 +105,7 @@ void SEARCH::adachi(char gx, char gy, float l_accel, float l_speed)
       case shortcut_rear:
       case rear:
         if (straight_count > 0) {
-          g_run.straight(straight_count * SECTION, l_accel, g_run.max_speed, l_speed, l_accel);
+          g_run.straight(straight_count * SECTION, l_speed, g_run.max_speed, l_speed, l_accel);
           straight_count = 0;
         }
         g_run.decelerate(HALF_SECTION, l_speed, l_accel);
@@ -122,7 +122,7 @@ void SEARCH::adachi(char gx, char gy, float l_accel, float l_speed)
   }
 
   if (straight_count > 0) {
-    g_run.straight(straight_count * SECTION, l_accel, g_run.max_speed, l_speed, l_accel);
+    g_run.straight(straight_count * SECTION, l_speed, g_run.max_speed, l_speed, l_accel);
     straight_count = 0;
   }
 
@@ -168,7 +168,7 @@ void SEARCH::adachi_sura(char gx, char gy, float l_accel, float l_speed)
     switch (g_map.nextDirGet(gx, gy, &glob_nextdir)) {
       case front:
         if (straight_count > 0) {
-          g_run.straight(straight_count * SECTION, l_accel, g_run.max_speed, l_speed, l_accel);
+          g_run.straight(straight_count * SECTION, l_speed, g_run.max_speed, l_speed, l_accel);
           straight_count = 0;
         }
         g_run.oneStep(SECTION, l_speed);
@@ -176,7 +176,7 @@ void SEARCH::adachi_sura(char gx, char gy, float l_accel, float l_speed)
       case shortcut_right:
       case right:
         if (straight_count > 0) {
-          g_run.straight(straight_count * SECTION, l_accel, g_run.max_speed, l_speed, l_accel);
+          g_run.straight(straight_count * SECTION, l_speed, g_run.max_speed, l_speed, l_accel);
           straight_count = 0;
         }
         g_run.sura(right,l_speed);
@@ -184,7 +184,7 @@ void SEARCH::adachi_sura(char gx, char gy, float l_accel, float l_speed)
       case shortcut_left:
       case left:
         if (straight_count > 0) {
-          g_run.straight(straight_count * SECTION, l_accel, g_run.max_speed, l_speed, l_accel);
+          g_run.straight(straight_count * SECTION, l_speed, g_run.max_speed, l_speed, l_accel);
           straight_count = 0;
         }
         g_run.sura(left,l_speed);
@@ -192,7 +192,7 @@ void SEARCH::adachi_sura(char gx, char gy, float l_accel, float l_speed)
       case shortcut_rear:
       case rear:
         if (straight_count > 0) {
-          g_run.straight(straight_count * SECTION, l_accel, g_run.max_speed, l_speed, l_accel);
+          g_run.straight(straight_count * SECTION, l_speed, g_run.max_speed, l_speed, l_accel);
           straight_count = 0;
         }
         g_run.decelerate(HALF_SECTION, l_speed, l_accel);
@@ -209,7 +209,7 @@ void SEARCH::adachi_sura(char gx, char gy, float l_accel, float l_speed)
   }
 
   if (straight_count > 0) {
-    g_run.straight(straight_count * SECTION, l_accel, g_run.max_speed, l_speed, l_accel);
+    g_run.straight(straight_count * SECTION, l_speed, g_run.max_speed, l_speed, l_accel);
     straight_count = 0;
   }
 
