@@ -1,0 +1,225 @@
+// Copyright 2023 RT Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#include "fast.h"
+
+FAST g_fast;
+
+void FAST::run(short gx, short gy,float l_accel, float l_speed)
+{
+  t_global_direction glob_nextdir;
+  int straight_count = 0;
+
+  switch (g_map.nextDir2Get(gx, gy, &glob_nextdir)) {
+    case right:
+      g_run.rotate(right, 1);  //右に曲がって
+      break;
+    case left:
+      g_run.rotate(left, 1);  //左に曲がって
+      break;
+    case rear:
+      g_run.rotate(right, 2);  //180度に旋回して
+      break;
+    default:
+      break;
+  }
+
+  g_run.accelerate(HALF_SECTION, l_speed,l_accel);
+  straight_count = 0;
+  g_map.mypos.dir = glob_nextdir;
+  g_map.axisUpdate();
+
+  while ((g_map.mypos.x != gx) || (g_map.mypos.y != gy)) {
+    switch (g_map.nextDir2Get(gx, gy, &glob_nextdir)) {
+      case front:
+        straight_count++;
+        break;
+      case right:
+        if (straight_count > 0) {
+          g_run.straight(
+            straight_count * SECTION, l_speed, g_run.max_speed, l_speed,l_accel);
+          straight_count = 0;
+        }
+        g_run.decelerate(HALF_SECTION, l_speed,l_accel);
+        g_run.rotate(right, 1);
+        g_run.accelerate(HALF_SECTION, l_speed,l_accel);
+        break;
+      case left:
+        if (straight_count > 0) {
+          g_run.straight(
+            straight_count * SECTION,l_speed, g_run.max_speed, l_speed,l_accel);
+          straight_count = 0;
+        }
+        g_run.decelerate(HALF_SECTION, l_speed,l_accel);
+        g_run.rotate(left, 1);
+        g_run.accelerate(HALF_SECTION, l_speed,l_accel);
+        break;
+      default:
+        break;
+    }
+    g_map.mypos.dir = glob_nextdir;
+    g_map.axisUpdate();
+  }
+  if (straight_count > 0) {
+    g_run.straight(
+      straight_count * SECTION, l_speed, g_run.max_speed,l_speed,l_accel);
+  }
+  g_run.decelerate(HALF_SECTION, l_speed,l_accel);
+}
+
+
+void FAST::runSura(short gx, short gy,float l_accel, float l_speed)
+{
+  t_global_direction glob_nextdir;
+  int straight_count = 0;
+
+  switch (g_map.nextDir2Get(gx, gy, &glob_nextdir)) {
+    case right:
+      g_run.rotate(right, 1);  //右に曲がって
+      break;
+    case left:
+      g_run.rotate(left, 1);  //左に曲がって
+      break;
+    case rear:
+      g_run.rotate(right, 2);  //180度に旋回して
+      break;
+    default:
+      break;
+  }
+
+  g_run.accelerate(HALF_SECTION, l_speed,l_accel);
+  straight_count = 0;
+  g_map.mypos.dir = glob_nextdir;
+  g_map.axisUpdate();
+
+  while ((g_map.mypos.x != gx) || (g_map.mypos.y != gy)) {
+    switch (g_map.nextDir2Get(gx, gy, &glob_nextdir)) {
+      case front:
+        straight_count++;
+        break;
+      case right:
+        if (straight_count > 0) {
+          g_run.straight(
+            straight_count * SECTION, l_speed, g_run.max_speed, l_speed,l_accel);
+          straight_count = 0;
+        }
+        g_run.sura(right, l_speed);
+        break;
+      case left:
+        if (straight_count > 0) {
+          g_run.straight(
+            straight_count * SECTION,l_speed, g_run.max_speed, l_speed,l_accel);
+          straight_count = 0;
+        }
+        g_run.sura(left, l_speed);
+        break;
+      default:
+        break;
+    }
+    g_map.mypos.dir = glob_nextdir;
+    g_map.axisUpdate();
+  }
+  if (straight_count > 0) {
+    g_run.straight(
+      straight_count * SECTION, l_speed, g_run.max_speed,l_speed,l_accel);
+  }
+  g_run.decelerate(HALF_SECTION, l_speed,l_accel);
+}
+
+
+void FAST::patternMake(short gx, short gy)
+{
+  t_global_direction glob_nextdir;
+  int straight_count = 0;
+  int i=0;
+
+  g_map.nextDir2Get(gx, gy, &glob_nextdir);
+  g_map.mypos.dir = glob_nextdir;
+  g_map.axisUpdate();
+
+  while ((g_map.mypos.x != gx) || (g_map.mypos.y != gy)) {
+    switch (g_map.nextDir2Get(gx, gy, &glob_nextdir)) {
+      case front:
+        straight_count++;
+        break;
+      case right:      
+          second_pattern[i++] = straight_count;
+          second_pattern[i++] = R90;
+          straight_count = 0;
+        break;
+      case left:
+          second_pattern[i++] = straight_count;
+          second_pattern[i++] = L90;      
+          straight_count = 0;
+        break;
+      default:
+        break;
+    }
+    g_map.mypos.dir = glob_nextdir;
+    g_map.axisUpdate();
+  }
+  second_pattern[i++] = straight_count;
+  second_pattern[i++] = 127;  //pattern end
+
+}
+
+void FAST::runPatternSura(short gx, short gy,float l_accel, float l_speed){
+  int i =0;
+  t_global_direction dir;
+  char old_turn=0;
+
+  patternMake(gx,gy);
+  g_run.accelerate(HALF_SECTION, l_speed,l_accel);
+
+  while(1){
+    if (second_pattern[i] > 0) {
+      if(second_pattern[i+2]>0){//大回りができる条件が成立
+        if(old_turn==0){
+          g_run.straight(SECTION * second_pattern[i]-15 , l_speed, g_run.max_speed, l_speed+75,l_accel);
+        }else{
+          g_run.straight(SECTION * second_pattern[i]-15-15 , l_speed+75, g_run.max_speed, l_speed+75,l_accel);
+        }
+      }else{
+        if(old_turn==0){
+          g_run.straight(SECTION * second_pattern[i] , l_speed, g_run.max_speed, l_speed,l_accel);
+        }else{
+          g_run.straight(SECTION * second_pattern[i]-15 , l_speed+75, g_run.max_speed, l_speed,l_accel);
+        }
+      }
+    }
+    i++;
+    if (second_pattern[i] == 127) {
+      break;
+    } else if (second_pattern[i] == R90) {
+      if((second_pattern[i-1]>0)&&(second_pattern[i+1]>0)){
+        g_run.sura(right, l_speed+75);
+        old_turn=1;
+      }else{
+        g_run.sura(right, l_speed);
+        old_turn=0;
+      }
+    } else if (second_pattern[i] == L90) {
+      if((second_pattern[i-1]>0)&&(second_pattern[i+1]>0)){
+        g_run.sura(left, l_speed+75);
+        old_turn=1;
+      }else{
+        g_run.sura(left, l_speed);      
+        old_turn=0;
+      }
+    }
+    i++;
+  } 
+
+  g_run.decelerate(HALF_SECTION, l_speed,l_accel);
+}
