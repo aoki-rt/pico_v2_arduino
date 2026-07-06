@@ -59,8 +59,16 @@ public:
   float tread_width;
   float pulse;
 
+  short sura_rl90_before_len_low,sura_rl90_before_len,sura_rl90_before_len_high;
+  short sura_rl90h_before_len_low,sura_rl90h_before_len,sura_rl90h_before_len_high;
 
+  short sura_rl90_omega_low,sura_rl90_omega,sura_rl90_omega_high;
+  short sura_rl180_omega_low,sura_rl180_omega,sura_rl180_omega_high;
+  short sura_rl90h_omega_low,sura_rl90h_omega,sura_rl90h_omega_high;
 
+  short sura_rl90_after_len_low,sura_rl90_after_len,sura_rl90_after_len_high;
+  short sura_rl180_after_len_low,sura_rl180_after_len,sura_rl180_after_len_high;
+  short sura_rl90h_after_len_low,sura_rl90h_after_len,sura_rl90h_after_len_high;
 
 
   RUN();
@@ -71,7 +79,7 @@ public:
   void oneStep(int len, int init_speed);
   void decelerate(int len, int init_speed,float l_accel);
   void rotate(t_local_direction dir, int times);
-  void sura(t_local_direction dir,int init_speed);
+  void sura(t_sura_mode dir,int init_speed);
   void positionInit(void);
   void back(int len);
 
