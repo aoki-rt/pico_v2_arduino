@@ -239,7 +239,7 @@ void webServerSetup(void) {
 
     html += "<table align=\"center\">";
     html += "<tr><th>ターン後len</th><th>low</th><th>normal</th><th>high</th></tr>";  
-    html += "<tr><th>90</th><th><input name=\"sura_rl90_afterlen_low\" type=\"text\" size=\"10\" value=";
+    html += "<tr><th>90</th><th><input name=\"sura_rl90_after_len_low\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90_after_len_low);
     html += "></th><th><input name=\"sura_rl90_after_len\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90_after_len);
@@ -448,7 +448,7 @@ void webServerSetup(void) {
     inputMessage = request->getParam("sura_rl90_after_len_high")->value();
     g_run.sura_rl90_after_len_high = inputMessage.toInt();
 
-    inputMessage = request->getParam("sura_rl180_aftet_len_low")->value();
+    inputMessage = request->getParam("sura_rl180_after_len_low")->value();
     g_run.sura_rl180_after_len_low = inputMessage.toInt();
     inputMessage = request->getParam("sura_rl180_after_len")->value();
     g_run.sura_rl180_after_len = inputMessage.toInt();
