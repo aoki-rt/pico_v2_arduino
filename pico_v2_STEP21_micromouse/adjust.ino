@@ -169,7 +169,7 @@ unsigned char ADJUST::modeExec(unsigned char l_mode)
   motorDisable();
   switch (l_mode) {
     case 1:
-/*
+
       buzzerEnable(INC_FREQ);
       delay(30);
       buzzerDisable();
@@ -178,9 +178,9 @@ unsigned char ADJUST::modeExec(unsigned char l_mode)
       delay(30);
       buzzerDisable();
       webServerSetup();
-*/      
+      
       //webserverでセンサの値のばらつきが大きすぎて判断できない時は、webServerSetup()をコメントアウトしadcView()のコメントをはずし、シリアルモニタで確認してください。
-            adcView();
+//            adcView();
       break;
     case 2:
       straightCheck(3);

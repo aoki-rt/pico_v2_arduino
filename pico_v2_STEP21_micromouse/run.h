@@ -59,14 +59,14 @@ public:
   float tread_width;
   float pulse;
 
-  short sura_rl90_before_len_low,sura_rl90_before_len,sura_rl90_before_len_high;
+  short sura_rl90_before_len_low, sura_rl90_before_len, sura_rl90_before_len_high;
   short sura_rl90h_before_len_low,sura_rl90h_before_len,sura_rl90h_before_len_high;
 
-  short sura_rl90_omega_low,sura_rl90_omega,sura_rl90_omega_high;
+  short sura_rl90_omega_low, sura_rl90_omega, sura_rl90_omega_high;
   short sura_rl180_omega_low,sura_rl180_omega,sura_rl180_omega_high;
   short sura_rl90h_omega_low,sura_rl90h_omega,sura_rl90h_omega_high;
 
-  short sura_rl90_after_len_low,sura_rl90_after_len,sura_rl90_after_len_high;
+  short sura_rl90_after_len_low, sura_rl90_after_len, sura_rl90_after_len_high;
   short sura_rl180_after_len_low,sura_rl180_after_len,sura_rl180_after_len_high;
   short sura_rl90h_after_len_low,sura_rl90h_after_len,sura_rl90h_after_len_high;
 
