@@ -207,6 +207,30 @@ void RUN::oneStep(int len, int init_speed)
   stay(init_speed);
 }
 
+void RUN::oneStepN(float len, int init_speed)
+{
+  int obj_step;
+
+  controlInterruptStop();
+  accel = 0.0;
+  speed = lower_speed_limit = upper_speed_limit = (double)init_speed;
+  con_wall.enable = false;
+  dirSet(MOT_FORWARD, MOT_FORWARD);
+  speedSet(speed, speed);
+  omega=0.0f;
+  obj_step = (int)(len * 2.0 / pulse);
+  controlInterruptStart();
+
+  while (1) {
+    stepGet();
+    if (step_lr > obj_step) {
+      break;
+    }
+  }
+
+  stay(init_speed);
+}
+
 void RUN::decelerate(int len, int init_speed,float l_accel)
 {
   int obj_step;
@@ -322,6 +346,14 @@ void RUN::sura(t_sura_mode dir,int init_speed)
     case R180:
     case L180:
     break;
+    case R45:
+    case L45:
+      if(init_speed==g_run.search_speed){
+        oneStepN(pre_st_nor+sura_rl45_before_len,init_speed);
+      }else{
+        oneStepN(pre_st_high+sura_rl45_before_len_high,init_speed);
+      }
+    
   }
 
 //旋回
@@ -378,11 +410,26 @@ void RUN::sura(t_sura_mode dir,int init_speed)
         obj_step = (int)(90.0f * PI / pulse)+sura_rl180_omega_high;//<=旋回角度はここで調整する        
       }
     break;
+    case R45:
+    case L45:
+      if(init_speed==g_run.search_speed){
+        omega = init_speed/(45.0f-(float)pre_st_nor);
+        upper_speed_limit = omega*(45.0f-(float)pre_st_nor + tread_width/2.0f);
+        lower_speed_limit = omega*(45.0f-(float)pre_st_nor - tread_width/2.0f);
+        obj_step = (int)((45.0f-(float)pre_st_nor) * PI /2 / pulse)+sura_rl45_omega;//<=旋回角度はここで調整する
+      }else{
+        omega = init_speed/(45.0f-(float)pre_st_high);
+        upper_speed_limit = omega*(45.0f-(float)pre_st_high + tread_width/2.0f);
+        lower_speed_limit = omega*(45.0f-(float)pre_st_high - tread_width/2.0f);
+        obj_step = (int)((45.0f-(float)pre_st_high) * PI /2 / pulse)+sura_rl45_omega_high;//<=旋回角度はここで調整する        
+      }    
+
+    break;
   }
 
 
   speed = init_speed;
-  if( (dir==R90)||(dir==R90H)||(dir==R180) ){
+  if( (dir==R90)||(dir==R90H)||(dir==R180)||(dir==R45)){
     omega=omega* -1.0f;
   }
 
@@ -426,6 +473,14 @@ void RUN::sura(t_sura_mode dir,int init_speed)
         oneStep(sura_rl180_after_len,init_speed);
       }else{
         oneStep(sura_rl180_after_len_high,init_speed);
+      }
+    break;
+    case R45:
+    case L45:
+      if(init_speed==g_run.search_speed){
+        oneStepN(pre_st_nor+sura_rl45_after_len,init_speed);
+      }else{
+        oneStepN(pre_st_high+sura_rl45_after_len_high,init_speed);
       }
     break;
   }
