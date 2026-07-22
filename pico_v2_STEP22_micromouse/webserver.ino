@@ -204,6 +204,13 @@ void webServerSetup(void) {
     html += "></th><th><input name=\"sura_rl90h_before_len_high\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90h_before_len_high);
     html += "></th></tr>";
+    html += "<tr><th>45</th><td><input name=\"sura_rl45_before_len_low\" type=\"text\" size=\"10\" value=";
+    html += String(g_run.sura_rl45_before_len_low);
+    html += "></th><th><input name=\"sura_rl45_before_len\" type=\"text\" size=\"10\" value=";
+    html += String(g_run.sura_rl45_before_len);
+    html += "></th><th><input name=\"sura_rl45_before_len_high\" type=\"text\" size=\"10\" value=";
+    html += String(g_run.sura_rl45_before_len_high);
+    html += "></th></tr>";
     html += "</table>";
     html += "<br>";
     html += "<br>";
@@ -225,6 +232,7 @@ void webServerSetup(void) {
     html += "></th><th><input name=\"sura_rl180_omega_high\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl180_omega_high);
     html += "></th></tr>";
+
     html += "<tr><th>90H</th><td><input name=\"sura_rl90h_omega_low\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90h_omega_low);
     html += "></th><th><input name=\"sura_rl90h_omega\" type=\"text\" size=\"10\" value=";
@@ -232,6 +240,15 @@ void webServerSetup(void) {
     html += "></th><th><input name=\"sura_rl90h_omega_high\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90h_omega_high);
     html += "></th></tr>";
+
+    html += "<tr><th>45</th><td><input name=\"sura_rl45_omega_low\" type=\"text\" size=\"10\" value=";
+    html += String(g_run.sura_rl45_omega_low);
+    html += "></th><th><input name=\"sura_rl45_omega\" type=\"text\" size=\"10\" value=";
+    html += String(g_run.sura_rl45_omega);
+    html += "></th><th><input name=\"sura_rl45_omega_high\" type=\"text\" size=\"10\" value=";
+    html += String(g_run.sura_rl45_omega_high);
+    html += "></th></tr>";
+
     html += "</table>";
     html += "<br>";
     html += "<br>";
@@ -259,6 +276,13 @@ void webServerSetup(void) {
     html += String(g_run.sura_rl90h_after_len);
     html += "></th><th><input name=\"sura_rl90h_after_len_high\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90h_after_len_high);
+    html += "></th></tr>";
+    html += "<tr><th>45</th><td><input name=\"sura_rl45_after_len_low\" type=\"text\" size=\"10\" value=";
+    html += String(g_run.sura_rl45_after_len_low);
+    html += "></th><th><input name=\"sura_rl45_after_len\" type=\"text\" size=\"10\" value=";
+    html += String(g_run.sura_rl45_after_len);
+    html += "></th><th><input name=\"sura_rl45_after_len_high\" type=\"text\" size=\"10\" value=";
+    html += String(g_run.sura_rl45_after_len_high);
     html += "></th></tr>";
     html += "</table>";
     html += "<br>";
@@ -420,6 +444,13 @@ void webServerSetup(void) {
     inputMessage = request->getParam("sura_rl90h_before_len_high")->value();
     g_run.sura_rl90h_before_len_high = inputMessage.toInt();
 
+    inputMessage = request->getParam("sura_rl45_before_len_low")->value();
+    g_run.sura_rl45_before_len_low = inputMessage.toFloat();
+    inputMessage = request->getParam("sura_rl45_before_len")->value();
+    g_run.sura_rl45_before_len = inputMessage.toFloat();
+    inputMessage = request->getParam("sura_rl45_before_len_high")->value();
+    g_run.sura_rl45_before_len_high = inputMessage.toFloat();
+
     inputMessage = request->getParam("sura_rl90_omega_low")->value();
     g_run.sura_rl90_omega_low = inputMessage.toInt();
     inputMessage = request->getParam("sura_rl90_omega")->value();
@@ -432,14 +463,19 @@ void webServerSetup(void) {
     g_run.sura_rl180_omega = inputMessage.toInt();
     inputMessage = request->getParam("sura_rl180_omega_high")->value();
     g_run.sura_rl180_omega_high = inputMessage.toInt();
-    
     inputMessage = request->getParam("sura_rl90h_omega_low")->value();
     g_run.sura_rl90h_omega_low = inputMessage.toInt();
     inputMessage = request->getParam("sura_rl90h_omega")->value();
     g_run.sura_rl90h_omega = inputMessage.toInt();
     inputMessage = request->getParam("sura_rl90h_omega_high")->value();
     g_run.sura_rl90h_omega_high = inputMessage.toInt();
-
+    
+    inputMessage = request->getParam("sura_rl45_omega_low")->value();
+    g_run.sura_rl45_omega_low = inputMessage.toInt();
+    inputMessage = request->getParam("sura_rl45_omega")->value();
+    g_run.sura_rl45_omega = inputMessage.toInt();
+    inputMessage = request->getParam("sura_rl45_omega_high")->value();
+    g_run.sura_rl45_omega_high = inputMessage.toInt();
 
     inputMessage = request->getParam("sura_rl90_after_len_low")->value();
     g_run.sura_rl90_after_len_low = inputMessage.toInt();
@@ -447,20 +483,25 @@ void webServerSetup(void) {
     g_run.sura_rl90_after_len = inputMessage.toInt();
     inputMessage = request->getParam("sura_rl90_after_len_high")->value();
     g_run.sura_rl90_after_len_high = inputMessage.toInt();
-
     inputMessage = request->getParam("sura_rl180_after_len_low")->value();
     g_run.sura_rl180_after_len_low = inputMessage.toInt();
     inputMessage = request->getParam("sura_rl180_after_len")->value();
     g_run.sura_rl180_after_len = inputMessage.toInt();
     inputMessage = request->getParam("sura_rl180_after_len_high")->value();
     g_run.sura_rl180_after_len_high = inputMessage.toInt();
- 
     inputMessage = request->getParam("sura_rl90h_after_len_low")->value();
     g_run.sura_rl90h_after_len_low = inputMessage.toInt();
     inputMessage = request->getParam("sura_rl90h_after_len")->value();
     g_run.sura_rl90h_after_len = inputMessage.toInt();
     inputMessage = request->getParam("sura_rl90h_after_len_high")->value();
     g_run.sura_rl90h_after_len_high = inputMessage.toInt();
+
+    inputMessage = request->getParam("sura_rl45_after_len_low")->value();
+    g_run.sura_rl45_after_len_low = inputMessage.toFloat();
+    inputMessage = request->getParam("sura_rl45_after_len")->value();
+    g_run.sura_rl45_after_len = inputMessage.toFloat();
+    inputMessage = request->getParam("sura_rl45_after_len_high")->value();
+    g_run.sura_rl45_after_len_high = inputMessage.toFloat();
 
 
     Serial.println("saved");

@@ -61,7 +61,7 @@ public:
 
   short sura_rl90_before_len_low, sura_rl90_before_len, sura_rl90_before_len_high;
   short sura_rl90h_before_len_low,sura_rl90h_before_len,sura_rl90h_before_len_high;
-  short sura_rl45_before_len_low,sura_rl45_before_len,sura_rl45_before_len_high;
+  float sura_rl45_before_len_low,sura_rl45_before_len,sura_rl45_before_len_high;
 
   short sura_rl90_omega_low, sura_rl90_omega, sura_rl90_omega_high;
   short sura_rl180_omega_low,sura_rl180_omega,sura_rl180_omega_high;
@@ -71,7 +71,7 @@ public:
   short sura_rl90_after_len_low, sura_rl90_after_len, sura_rl90_after_len_high;
   short sura_rl180_after_len_low,sura_rl180_after_len,sura_rl180_after_len_high;
   short sura_rl90h_after_len_low,sura_rl90h_after_len,sura_rl90h_after_len_high;
-  short sura_rl45_after_len_low,sura_rl45_after_len,sura_rl45_after_len_high;
+  float sura_rl45_after_len_low,sura_rl45_after_len,sura_rl45_after_len_high;
 
 
   RUN();

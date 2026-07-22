@@ -431,10 +431,12 @@ void paramRead(void)
       g_run.sura_rl90h_before_len = cmds[1].toInt();
     } else if (cmds[0].equals("sura_rl90h_before_len_high")) {
       g_run.sura_rl90h_before_len_high= cmds[1].toInt();
+    } else if (cmds[0].equals("sura_rl45_before_len_low")) {
+      g_run.sura_rl45_before_len_low = cmds[1].toFloat();
     } else if (cmds[0].equals("sura_rl45_before_len")) {
-      g_run.sura_rl45_before_len = cmds[1].toInt();
+      g_run.sura_rl45_before_len = cmds[1].toFloat();
     } else if (cmds[0].equals("sura_rl45_before_len_high")) {
-      g_run.sura_rl45_before_len_high= cmds[1].toInt();
+      g_run.sura_rl45_before_len_high= cmds[1].toFloat();
 
     } else if (cmds[0].equals("sura_rl90_omega_low")) {
       g_run.sura_rl90_omega_low = cmds[1].toInt();
@@ -477,10 +479,12 @@ void paramRead(void)
       g_run.sura_rl90h_after_len = cmds[1].toInt();
     } else if (cmds[0].equals("sura_rl90h_after_len_high")) {
       g_run.sura_rl90h_after_len_high= cmds[1].toInt();
+    } else if (cmds[0].equals("sura_rl45_after_len_low")) {
+      g_run.sura_rl45_after_len_low = cmds[1].toFloat();
     } else if (cmds[0].equals("sura_rl45_after_len")) {
-      g_run.sura_rl45_after_len = cmds[1].toInt();
+      g_run.sura_rl45_after_len = cmds[1].toFloat();
     } else if (cmds[0].equals("sura_rl45_after_len_high")) {
-      g_run.sura_rl45_after_len_high= cmds[1].toInt();
+      g_run.sura_rl45_after_len_high= cmds[1].toFloat();
 
 
     } else {
