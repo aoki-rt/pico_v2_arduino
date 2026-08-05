@@ -32,6 +32,7 @@
 #include "search.h"
 #include "sensor.h"
 
+char parameter_select;
 
 void setup()
 {

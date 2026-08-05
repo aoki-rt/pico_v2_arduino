@@ -28,6 +28,8 @@
 #include "search.h"
 #include "sensor.h"
 
+char parameter_select;
+
 void setup()
 {
   // put your setup code here, to run once:

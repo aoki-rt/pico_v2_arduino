@@ -12,8 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-void flashInit(void)
-{
+void flashInit(void) {
   String cmd_tmp;
   String file_tmp;
   file_tmp = "/parameters.txt";
@@ -79,6 +78,8 @@ void flashInit(void)
   appendFile(SPIFFS, file_tmp, cmd_tmp);
   cmd_tmp = "sura_rl90h_before_len_high " + String(RL90H_BEFORE_HIGH_INIT) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
+  cmd_tmp = "sura_rl45_before_len_low " + String(RL45_BEFORE_LOW_INIT) + '\n';
+  appendFile(SPIFFS, file_tmp, cmd_tmp);
   cmd_tmp = "sura_rl45_before_len " + String(RL45_BEFORE_INIT) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
   cmd_tmp = "sura_rl45_before_len_high " + String(RL45_BEFORE_HIGH_INIT) + '\n';
@@ -102,10 +103,12 @@ void flashInit(void)
   appendFile(SPIFFS, file_tmp, cmd_tmp);
   cmd_tmp = "sura_rl90h_omega_high " + String(RL90H_OMEGA_HIGH_INIT) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
+  cmd_tmp = "sura_rl45_omega_low " + String(RL45_OMEGA_LOW_INIT) + '\n';
+  appendFile(SPIFFS, file_tmp, cmd_tmp);
   cmd_tmp = "sura_rl45_omega " + String(RL45_OMEGA_INIT) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
   cmd_tmp = "sura_rl45_omega_high " + String(RL45_OMEGA_HIGH_INIT) + '\n';
-  appendFile(SPIFFS, file_tmp, cmd_tmp);  
+  appendFile(SPIFFS, file_tmp, cmd_tmp);
 
   cmd_tmp = "sura_rl90_after_len_low " + String(RL90_AFTER_LOW_INIT) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
@@ -125,19 +128,23 @@ void flashInit(void)
   appendFile(SPIFFS, file_tmp, cmd_tmp);
   cmd_tmp = "sura_rl90h_after_len_high " + String(RL90H_AFTER_HIGH_INIT) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
+  cmd_tmp = "sura_rl45_after_len_low " + String(RL45_AFTER_LOW_INIT) + '\n';
+  appendFile(SPIFFS, file_tmp, cmd_tmp);
   cmd_tmp = "sura_rl45_after_len " + String(RL45_AFTER_INIT) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
   cmd_tmp = "sura_rl45_after_len_high " + String(RL45_AFTER_HIGH_INIT) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
 
+  parameter_select = 1;
+  cmd_tmp = "parameter_init 1\n";
+  writeFile(SPIFFS, "/parameters_init.txt", cmd_tmp);
 
   PWMInterruptStart();
   controlInterruptStart();
   sensorInterruptStart();
 }
 
-void flashBegin(void)
-{
+void flashBegin(void) {
   controlInterruptStop();
   sensorInterruptStop();
   PWMInterruptStop();
@@ -160,8 +167,7 @@ void flashBegin(void)
   sensorInterruptStart();
 }
 
-void mapWrite(void)
-{
+void mapWrite(void) {
   String file_tmp;
   unsigned char data_temp;
   file_tmp = "/map.txt";
@@ -180,8 +186,7 @@ void mapWrite(void)
   }
   for (int i = 0; i < MAZESIZE_X; i++) {
     for (int j = 0; j < MAZESIZE_Y; j++) {
-      data_temp = g_map.wallDataGet(i, j, north) + (g_map.wallDataGet(i, j, east) << 2) +
-                  (g_map.wallDataGet(i, j, south) << 4) + (g_map.wallDataGet(i, j, west) << 6);
+      data_temp = g_map.wallDataGet(i, j, north) + (g_map.wallDataGet(i, j, east) << 2) + (g_map.wallDataGet(i, j, south) << 4) + (g_map.wallDataGet(i, j, west) << 6);
       if (file.write(data_temp)) {  //バイナリ書き込み
       } else {
         Serial.println("- write failed");
@@ -195,8 +200,7 @@ void mapWrite(void)
   PWMInterruptStart();
 }
 
-void mapCopy(void)
-{
+void mapCopy(void) {
   String file_tmp;
   unsigned char read_data;
 
@@ -228,11 +232,10 @@ void mapCopy(void)
   PWMInterruptStart();
 }
 
-void paramWrite(void)
-{
+void paramWrite(void) {
   String cmd_tmp;
   String file_tmp;
-  char * temp_char;
+  char* temp_char;
 
   //タイマーによる割り込みは禁止にする必要がある。
   controlInterruptStop();
@@ -297,10 +300,12 @@ void paramWrite(void)
   appendFile(SPIFFS, file_tmp, cmd_tmp);
   cmd_tmp = "sura_rl90h_before_len_high " + String(g_run.sura_rl90h_before_len_high) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
-  cmd_tmp = "sura_rl45_before_len " + String(g_run.sura_rl90h_before_len) + '\n';
+  cmd_tmp = "sura_rl45_before_len_low " + String(g_run.sura_rl45_before_len_low) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
-  cmd_tmp = "sura_rl45_before_len_high " + String(g_run.sura_rl90h_before_len_high) + '\n';
-  appendFile(SPIFFS, file_tmp, cmd_tmp);  
+  cmd_tmp = "sura_rl45_before_len " + String(g_run.sura_rl45_before_len) + '\n';
+  appendFile(SPIFFS, file_tmp, cmd_tmp);
+  cmd_tmp = "sura_rl45_before_len_high " + String(g_run.sura_rl45_before_len_high) + '\n';
+  appendFile(SPIFFS, file_tmp, cmd_tmp);
 
   cmd_tmp = "sura_rl90_omega_low " + String(g_run.sura_rl90_omega_low) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
@@ -318,9 +323,11 @@ void paramWrite(void)
   appendFile(SPIFFS, file_tmp, cmd_tmp);
   cmd_tmp = "sura_rl90h_omega " + String(g_run.sura_rl90h_omega) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
-  cmd_tmp = "sura_rl90h_omega_high " + String(g_run.sura_rl45_omega_high) + '\n';
+  cmd_tmp = "sura_rl90h_omega_high " + String(g_run.sura_rl90h_omega_high) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
-  cmd_tmp = "sura_rl45_omega " + String(g_run.sura_rl90h_omega) + '\n';
+  cmd_tmp = "sura_rl45_omega_low " + String(g_run.sura_rl45_omega_low) + '\n';
+  appendFile(SPIFFS, file_tmp, cmd_tmp);
+  cmd_tmp = "sura_rl45_omega " + String(g_run.sura_rl45_omega) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
   cmd_tmp = "sura_rl45_omega_high " + String(g_run.sura_rl45_omega_high) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
@@ -343,24 +350,28 @@ void paramWrite(void)
   appendFile(SPIFFS, file_tmp, cmd_tmp);
   cmd_tmp = "sura_rl90h_after_len_high " + String(g_run.sura_rl90h_after_len_high) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
+  cmd_tmp = "sura_rl45_after_len_low " + String(g_run.sura_rl45_after_len_low) + '\n';
+  appendFile(SPIFFS, file_tmp, cmd_tmp);
   cmd_tmp = "sura_rl45_after_len " + String(g_run.sura_rl45_after_len) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
   cmd_tmp = "sura_rl45_after_len_high " + String(g_run.sura_rl45_after_len_high) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
 
+  cmd_tmp = "parameter_init " + String(parameter_select) + '\n';
+  writeFile(SPIFFS, "/parameters_init.txt", cmd_tmp);
+  Serial.printf("parameter_select %d\n\r", parameter_select);
 
   controlInterruptStart();
   sensorInterruptStart();
   PWMInterruptStart();
 }
 
-void paramRead(void)
-{
+void paramRead(void) {
   String cmd_tmp;
   String file_tmp;
   int temp;
 
-  String cmds[2] = {"\0"};  // 分割された文字列を格納する配列
+  String cmds[2] = { "\0" };  // 分割された文字列を格納する配列
 
   //タイマーによる割り込みは禁止にする必要がある。
   controlInterruptStop();
@@ -368,135 +379,224 @@ void paramRead(void)
   PWMInterruptStop();
   delay(10);
 
-  File file = SPIFFS.open("/parameters.txt");
+  file_tmp = "/parameters_init.txt";
+  File file = SPIFFS.open(file_tmp);
+
+  if (!file || file.isDirectory()) {
+    Serial.println("- parameter_init failed to open file for reading");
+    parameter_select = 1;
+    cmd_tmp = "parameter_init 1\n";
+    writeFile(SPIFFS, "/parameters_init.txt", cmd_tmp);
+  } else {
+    while (file.available()) {
+      int index = split(file.readStringUntil('\n'), ' ', cmds);
+      if (cmds[0].equals("parameter_init")) {
+        Serial.println("hit parameter_init");
+        parameter_select = cmds[1].toInt();
+      }
+      cmds[0] = { "\0" };
+      cmds[1] = { "\0" };
+    }
+  }
+  Serial.printf("parameter_select %d\n\r", parameter_select);
+  file.close();
+
+
+
+  file = SPIFFS.open("/parameters.txt");
   if (!file || file.isDirectory()) {
     Serial.println("- failed to open file for reading");
     flashInit();
   }
 
   Serial.println("- read from file:");
-  while (file.available()) {
-    int index = split(file.readStringUntil('\n'), ' ', cmds);
-    if (cmds[0].equals("ref_sen_r")) {
-      g_sensor.sen_r.ref = cmds[1].toInt();
-    } else if (cmds[0].equals("ref_sen_l")) {
-      g_sensor.sen_l.ref = cmds[1].toInt();
-    } else if (cmds[0].equals("th_sen_r")) {
-      g_sensor.sen_r.th_wall = cmds[1].toInt();
-      g_sensor.sen_r.th_control = g_sensor.sen_r.th_wall;
-    } else if (cmds[0].equals("th_sen_l")) {
-      g_sensor.sen_l.th_wall = cmds[1].toInt();
-      g_sensor.sen_l.th_control = g_sensor.sen_l.th_wall;
-    } else if (cmds[0].equals("th_sen_fr")) {
-      g_sensor.sen_fr.th_wall = cmds[1].toInt();
-    } else if (cmds[0].equals("th_sen_fl")) {
-      g_sensor.sen_fl.th_wall = cmds[1].toInt();
-    } else if (cmds[0].equals("goal_x")) {
-      g_map.goal_mx = cmds[1].toInt();
-    } else if (cmds[0].equals("goal_y")) {
-      g_map.goal_my = cmds[1].toInt();
-    } else if (cmds[0].equals("tire_d")) {
-      g_run.tire_diameter = cmds[1].toFloat();
-    } else if (cmds[0].equals("tread_w")) {
-      g_run.tread_width = cmds[1].toFloat();
-    } else if (cmds[0].equals("con_kp")) {
-      g_run.con_wall.kp = cmds[1].toFloat();
 
-    } else if (cmds[0].equals("search_accel")) {
-      g_run.search_accel = cmds[1].toFloat();
-    } else if (cmds[0].equals("search_accel_low")) {
-      g_run.search_accel_low = cmds[1].toFloat();
-    } else if (cmds[0].equals("search_accel_high")) {
-      g_run.search_accel_high = cmds[1].toFloat();
-    } else if (cmds[0].equals("turn_accel")) {
-      g_run.turn_accel = cmds[1].toFloat();
-    } else if (cmds[0].equals("search_speed")) {
-      g_run.search_speed = cmds[1].toInt();
-    } else if (cmds[0].equals("search_speed_low")) {
-      g_run.search_speed_low = cmds[1].toInt();
-    } else if (cmds[0].equals("search_speed_high")) {
-      g_run.search_speed_high = cmds[1].toInt();
-    } else if (cmds[0].equals("max_speed")) {
-      g_run.max_speed = cmds[1].toInt();
+  if (parameter_select == 1) {
+    g_sensor.sen_r.ref = REF_SEN_R_INIT;
+    g_sensor.sen_l.ref = REF_SEN_L_INIT;
+    g_sensor.sen_r.th_control = g_sensor.sen_r.th_wall = TH_SEN_R_INIT;
+    g_sensor.sen_l.th_control = g_sensor.sen_l.th_wall = TH_SEN_L_INIT;
+    g_sensor.sen_fr.th_wall = TH_SEN_FR_INIT;
+    g_sensor.sen_fl.th_wall = TH_SEN_FL_INIT;
+    g_map.goal_mx = GOAL_X_INIT;
+    g_map.goal_my = GOAL_Y_INIT;
+    g_run.tire_diameter = TIRE_DIAMETER_INIT;
+    g_run.tread_width = TREAD_WIDTH_INIT;
+    g_run.con_wall.kp = CON_WALL_KP_INIT;
 
-    } else if (cmds[0].equals("sura_rl90_before_len_low")) {
-      g_run.sura_rl90_before_len_low = cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl90_before_len")) {
-      g_run.sura_rl90_before_len = cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl90_before_len_high")) {
-      g_run.sura_rl90_before_len_high= cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl90h_before_len_low")) {
-      g_run.sura_rl90h_before_len_low = cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl90h_before_len")) {
-      g_run.sura_rl90h_before_len = cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl90h_before_len_high")) {
-      g_run.sura_rl90h_before_len_high= cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl45_before_len_low")) {
-      g_run.sura_rl45_before_len_low = cmds[1].toFloat();
-    } else if (cmds[0].equals("sura_rl45_before_len")) {
-      g_run.sura_rl45_before_len = cmds[1].toFloat();
-    } else if (cmds[0].equals("sura_rl45_before_len_high")) {
-      g_run.sura_rl45_before_len_high= cmds[1].toFloat();
+    g_run.search_accel = SEARCH_ACCEL_INIT;
+    g_run.search_accel_low = SEARCH_ACCEL_LOW_INIT;
+    g_run.search_accel_high = SEARCH_ACCEL_HIGH_INIT;
 
-    } else if (cmds[0].equals("sura_rl90_omega_low")) {
-      g_run.sura_rl90_omega_low = cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl90_omega")) {
-      g_run.sura_rl90_omega = cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl90_omega_high")) {
-      g_run.sura_rl90_omega_high= cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl180_omega_low")) {
-      g_run.sura_rl180_omega_low = cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl180_omega")) {
-      g_run.sura_rl180_omega = cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl180_omega_high")) {
-      g_run.sura_rl180_omega_high= cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl90h_omega_low")) {
-      g_run.sura_rl90h_omega_low = cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl90h_omega")) {
-      g_run.sura_rl90h_omega = cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl90h_omega_high")) {
-      g_run.sura_rl90h_omega_high= cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl45_omega")) {
-      g_run.sura_rl45_omega = cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl45_omega_high")) {
-      g_run.sura_rl45_omega_high= cmds[1].toInt();
+    g_run.turn_accel = TURN_ACCEL_INIT;
+    g_run.search_speed = SEARCH_SPEED_INIT;
+    g_run.search_speed_low = SEARCH_SPEED_LOW_INIT;
+    g_run.search_speed_high = SEARCH_SPEED_HIGH_INIT;
+    g_run.max_speed = MAX_SPEED_INIT;
 
-    } else if (cmds[0].equals("sura_rl90_after_len_low")) {
-      g_run.sura_rl90_after_len_low = cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl90_after_len")) {
-      g_run.sura_rl90_after_len = cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl90_after_len_high")) {
-      g_run.sura_rl90_after_len_high= cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl180_after_len_low")) {
-      g_run.sura_rl180_after_len_low = cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl180_after_len")) {
-      g_run.sura_rl180_after_len = cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl180_after_len_high")) {
-      g_run.sura_rl180_after_len_high= cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl90h_after_len_low")) {
-      g_run.sura_rl90h_after_len_low = cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl90h_after_len")) {
-      g_run.sura_rl90h_after_len = cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl90h_after_len_high")) {
-      g_run.sura_rl90h_after_len_high= cmds[1].toInt();
-    } else if (cmds[0].equals("sura_rl45_after_len_low")) {
-      g_run.sura_rl45_after_len_low = cmds[1].toFloat();
-    } else if (cmds[0].equals("sura_rl45_after_len")) {
-      g_run.sura_rl45_after_len = cmds[1].toFloat();
-    } else if (cmds[0].equals("sura_rl45_after_len_high")) {
-      g_run.sura_rl45_after_len_high= cmds[1].toFloat();
+    g_run.sura_rl90_before_len_low = RL90_BEFORE_LOW_INIT;
+    g_run.sura_rl90_before_len = RL90_BEFORE_INIT;
+    g_run.sura_rl90_before_len_high = RL90_BEFORE_HIGH_INIT;
+    g_run.sura_rl90h_before_len_low = RL90H_BEFORE_LOW_INIT;
+    g_run.sura_rl90h_before_len = RL90H_BEFORE_INIT;
+    g_run.sura_rl90h_before_len_high = RL90H_BEFORE_HIGH_INIT;
+    g_run.sura_rl45_before_len_low = RL45_BEFORE_LOW_INIT;
+    g_run.sura_rl45_before_len = RL45_BEFORE_INIT;
+    g_run.sura_rl45_before_len_high = RL45_BEFORE_HIGH_INIT;
+    g_run.sura_rl90_omega_low = RL90_OMEGA_LOW_INIT;
+    g_run.sura_rl90_omega = RL90_OMEGA_INIT;
+    g_run.sura_rl90_omega_high = RL90_OMEGA_HIGH_INIT;
+    g_run.sura_rl180_omega_low = RL180_OMEGA_LOW_INIT;
+    g_run.sura_rl180_omega = RL180_OMEGA_INIT;
+    g_run.sura_rl180_omega_high = RL180_OMEGA_HIGH_INIT;
+    g_run.sura_rl90h_omega_low = RL90H_OMEGA_LOW_INIT;
+    g_run.sura_rl90h_omega = RL90H_OMEGA_INIT;
+    g_run.sura_rl90h_omega_high = RL90H_OMEGA_HIGH_INIT;
+    g_run.sura_rl45_omega_low = RL45_OMEGA_LOW_INIT;
+    g_run.sura_rl45_omega = RL45_OMEGA_INIT;
+    g_run.sura_rl45_omega_high = RL45_OMEGA_HIGH_INIT;
+
+    g_run.sura_rl90_after_len_low = RL90_AFTER_LOW_INIT;
+    g_run.sura_rl90_after_len = RL90_AFTER_INIT;
+    g_run.sura_rl90_after_len_high = RL90_AFTER_HIGH_INIT;
+    g_run.sura_rl180_after_len_low = RL180_AFTER_LOW_INIT;
+    g_run.sura_rl180_after_len = RL180_AFTER_INIT;
+    g_run.sura_rl180_after_len_high = RL180_AFTER_HIGH_INIT;
+    g_run.sura_rl90h_after_len_low = RL90H_AFTER_LOW_INIT;
+    g_run.sura_rl90h_after_len = RL90H_AFTER_INIT;
+    g_run.sura_rl90h_after_len_high = RL90H_AFTER_HIGH_INIT;
+    g_run.sura_rl45_after_len_low = RL45_AFTER_LOW_INIT;
+    g_run.sura_rl45_after_len = RL45_AFTER_INIT;
+    g_run.sura_rl45_after_len_high = RL45_AFTER_HIGH_INIT;
 
 
-    } else {
-      Serial.print("parameter cmds Error ");
-      Serial.println(cmds[0]);
-      delay(10);
-      flashInit();
-      break;
+    g_run.pulse = g_run.tire_diameter * PI / (35.0 / 10.0 * 20.0 * 8.0);
+  } else {
+    while (file.available()) {
+      int index = split(file.readStringUntil('\n'), ' ', cmds);
+      if (cmds[0].equals("ref_sen_r")) {
+        g_sensor.sen_r.ref = cmds[1].toInt();
+      } else if (cmds[0].equals("ref_sen_l")) {
+        g_sensor.sen_l.ref = cmds[1].toInt();
+      } else if (cmds[0].equals("th_sen_r")) {
+        g_sensor.sen_r.th_wall = cmds[1].toInt();
+        g_sensor.sen_r.th_control = g_sensor.sen_r.th_wall;
+      } else if (cmds[0].equals("th_sen_l")) {
+        g_sensor.sen_l.th_wall = cmds[1].toInt();
+        g_sensor.sen_l.th_control = g_sensor.sen_l.th_wall;
+      } else if (cmds[0].equals("th_sen_fr")) {
+        g_sensor.sen_fr.th_wall = cmds[1].toInt();
+      } else if (cmds[0].equals("th_sen_fl")) {
+        g_sensor.sen_fl.th_wall = cmds[1].toInt();
+      } else if (cmds[0].equals("goal_x")) {
+        g_map.goal_mx = cmds[1].toInt();
+      } else if (cmds[0].equals("goal_y")) {
+        g_map.goal_my = cmds[1].toInt();
+      } else if (cmds[0].equals("tire_d")) {
+        g_run.tire_diameter = cmds[1].toFloat();
+      } else if (cmds[0].equals("tread_w")) {
+        g_run.tread_width = cmds[1].toFloat();
+      } else if (cmds[0].equals("con_kp")) {
+        g_run.con_wall.kp = cmds[1].toFloat();
+
+      } else if (cmds[0].equals("search_accel")) {
+        g_run.search_accel = cmds[1].toFloat();
+      } else if (cmds[0].equals("search_accel_low")) {
+        g_run.search_accel_low = cmds[1].toFloat();
+      } else if (cmds[0].equals("search_accel_high")) {
+        g_run.search_accel_high = cmds[1].toFloat();
+      } else if (cmds[0].equals("turn_accel")) {
+        g_run.turn_accel = cmds[1].toFloat();
+      } else if (cmds[0].equals("search_speed")) {
+        g_run.search_speed = cmds[1].toInt();
+      } else if (cmds[0].equals("search_speed_low")) {
+        g_run.search_speed_low = cmds[1].toInt();
+      } else if (cmds[0].equals("search_speed_high")) {
+        g_run.search_speed_high = cmds[1].toInt();
+      } else if (cmds[0].equals("max_speed")) {
+        g_run.max_speed = cmds[1].toInt();
+
+      } else if (cmds[0].equals("sura_rl90_before_len_low")) {
+        g_run.sura_rl90_before_len_low = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl90_before_len")) {
+        g_run.sura_rl90_before_len = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl90_before_len_high")) {
+        g_run.sura_rl90_before_len_high = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl90h_before_len_low")) {
+        g_run.sura_rl90h_before_len_low = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl90h_before_len")) {
+        g_run.sura_rl90h_before_len = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl90h_before_len_high")) {
+        g_run.sura_rl90h_before_len_high = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl45_before_len_low")) {
+        g_run.sura_rl45_before_len_low = cmds[1].toFloat();
+      } else if (cmds[0].equals("sura_rl45_before_len")) {
+        g_run.sura_rl45_before_len = cmds[1].toFloat();
+      } else if (cmds[0].equals("sura_rl45_before_len_high")) {
+        g_run.sura_rl45_before_len_high = cmds[1].toFloat();
+
+      } else if (cmds[0].equals("sura_rl90_omega_low")) {
+        g_run.sura_rl90_omega_low = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl90_omega")) {
+        g_run.sura_rl90_omega = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl90_omega_high")) {
+        g_run.sura_rl90_omega_high = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl180_omega_low")) {
+        g_run.sura_rl180_omega_low = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl180_omega")) {
+        g_run.sura_rl180_omega = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl180_omega_high")) {
+        g_run.sura_rl180_omega_high = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl90h_omega_low")) {
+        g_run.sura_rl90h_omega_low = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl90h_omega")) {
+        g_run.sura_rl90h_omega = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl90h_omega_high")) {
+        g_run.sura_rl90h_omega_high = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl45_omega_low")) {
+        g_run.sura_rl45_omega_low = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl45_omega")) {
+        g_run.sura_rl45_omega = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl45_omega_high")) {
+        g_run.sura_rl45_omega_high = cmds[1].toInt();
+
+      } else if (cmds[0].equals("sura_rl90_after_len_low")) {
+        g_run.sura_rl90_after_len_low = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl90_after_len")) {
+        g_run.sura_rl90_after_len = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl90_after_len_high")) {
+        g_run.sura_rl90_after_len_high = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl180_after_len_low")) {
+        g_run.sura_rl180_after_len_low = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl180_after_len")) {
+        g_run.sura_rl180_after_len = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl180_after_len_high")) {
+        g_run.sura_rl180_after_len_high = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl90h_after_len_low")) {
+        g_run.sura_rl90h_after_len_low = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl90h_after_len")) {
+        g_run.sura_rl90h_after_len = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl90h_after_len_high")) {
+        g_run.sura_rl90h_after_len_high = cmds[1].toInt();
+      } else if (cmds[0].equals("sura_rl45_after_len_low")) {
+        g_run.sura_rl45_after_len_low = cmds[1].toFloat();
+      } else if (cmds[0].equals("sura_rl45_after_len")) {
+        g_run.sura_rl45_after_len = cmds[1].toFloat();
+      } else if (cmds[0].equals("sura_rl45_after_len_high")) {
+        g_run.sura_rl45_after_len_high = cmds[1].toFloat();
+
+
+      } else {
+        Serial.print("parameter cmds Error ");
+        Serial.println(cmds[0]);
+        delay(10);
+        flashInit();
+        break;
+      }
+      g_run.pulse = g_run.tire_diameter * PI / (35.0 / 10.0 * 20.0 * 8.0);
+      cmds[0] = { "\0" };
+      cmds[1] = { "\0" };
     }
-    g_run.pulse = g_run.tire_diameter * PI / (35.0 / 10.0 * 20.0 *8.0);
-    cmds[0] = {"\0"};
-    cmds[1] = {"\0"};
   }
   file.close();
   controlInterruptStart();
@@ -504,8 +604,7 @@ void paramRead(void)
   PWMInterruptStart();
 }
 
-int split(String data, char delimiter, String * dst)
-{
+int split(String data, char delimiter, String* dst) {
   int index = 0;
   int arraySize = (sizeof(data) / sizeof((data)[0]));
   int datalength = data.length();
@@ -520,8 +619,7 @@ int split(String data, char delimiter, String * dst)
   return (index + 1);
 }
 
-void readFile(fs::FS & fs, String path)
-{
+void readFile(fs::FS& fs, String path) {
   Serial.printf("Reading file: ");
   Serial.println(path);
 
@@ -538,8 +636,7 @@ void readFile(fs::FS & fs, String path)
   file.close();
 }
 
-void writeFile(fs::FS & fs, String path, String message)
-{
+void writeFile(fs::FS& fs, String path, String message) {
   Serial.printf("Writing file: ");
   Serial.println(path);
 
@@ -555,8 +652,7 @@ void writeFile(fs::FS & fs, String path, String message)
   file.close();
 }
 
-void appendFile(fs::FS & fs, String path, String message)
-{
+void appendFile(fs::FS& fs, String path, String message) {
   Serial.printf("Appending to file: ");
   Serial.println(path);
 

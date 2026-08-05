@@ -65,6 +65,12 @@ void webServerSetup(void) {
     html += "</head>";
     html += "<body>";
     html += "<h1>Pi:Co V2_Parameter</h1>";
+    if (parameter_select == 1) {
+      html += "<input type=\"checkbox\" id =\"parameter_init\" onchange=\"toggleData()\" checked >ParameterのINITの値を使用";
+    } else {
+      html += "<input type=\"checkbox\" id =\"parameter_init\" onchange=\"toggleData()\" >ParameterのINITの値を使用";
+    }
+
     html += "<form action=\"/get\">";
 
     html += "<p><h2>battery Value</h2></p>";
@@ -95,7 +101,7 @@ void webServerSetup(void) {
     html += "<p><h2>Sensor Parameter</h2></p>";
 
     html += "<table align=\"center\">";
-    html += "<tr><th>Gain</th><td><input name=\"wall_kp\" type=\"text\" size=\"10\" value=";
+    html += "<tr><th>Gain</th><td><input name=\"wall_kp\" type=\"text\" id=\"wall_kp\" size=\"10\" value=";
     html += String(g_run.con_wall.kp, 3);
     html += "></td></tr>";
     html += "</table>";
@@ -103,19 +109,21 @@ void webServerSetup(void) {
 
     html += "<table align=\"center\">";
     html += "<tr><th></th><th>Left</th><th>Right</th></tr>";
-    html += "<tr><th>SIDE REF</th><th><input name=\"ref_left\" type=\"text\" size=\"10\" value=";
+    html += "<tr><th>SIDE REF</th><th><input name=\"ref_left\" type=\"text\" id=\"ref_left\" size=\"10\" value=";
     html += String(g_sensor.sen_l.ref);
-    html += "></th><th><input name=\"ref_right\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"ref_right\" type=\"text\" id=\"ref_right\" size=\"10\" value=";
     html += String(g_sensor.sen_r.ref);
     html += "></th></tr>";
-    html += "<tr><th>SIDE Threshold</th><td><input name=\"th_left\" type=\"text\" size=\"10\" value=";
+    html +=
+      "<tr><th>SIDE Threshold</th><td><input name=\"th_left\" type=\"text\" id=\"th_left\" size=\"10\" value=";
     html += String(g_sensor.sen_l.th_wall);
-    html += "></td><td><input name=\"th_right\" type=\"text\" size=\"10\" value=";
+    html += "></td><td><input name=\"th_right\" type=\"text\" id=\"th_right\" size=\"10\" value=";
     html += String(g_sensor.sen_r.th_wall);
     html += "></td></tr>";
-    html += "<tr><th>FRONT Threshold</th><th><input name=\"th_fl\" type=\"text\"size=\"10\"  value=";
+    html +=
+      "<tr><th>FRONT Threshold</th><th><input name=\"th_fl\" id=\"th_fl\" type=\"text\"size=\"10\"  value=";
     html += String(g_sensor.sen_fl.th_wall);
-    html += "></th><th><input name=\"th_fr\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"th_fr\" type=\"text\" id=\"th_fr\" size=\"10\" value=";
     html += String(g_sensor.sen_fr.th_wall);
     html += "></th></tr>";
     html += "</table>";
@@ -125,16 +133,17 @@ void webServerSetup(void) {
 
     html += "<input type=\"submit\" value=\"Save\">";
 
-
     html += "<br>";
     html += "<br>";
 
     html += "<p><h2>Tire Parameter</h2></p>";
     html += "<table align=\"center\">";
-    html += "<tr><th>TIRE_DIAMETER</th><td><input name=\"tire_dia\" type=\"text\" size=\"10\" value=";
+    html +=
+      "<tr><th>TIRE_DIAMETER</th><td><input name=\"tire_dia\" id=\"tire_dia\" type=\"text\" size=\"10\" value=";
     html += String(g_run.tire_diameter, 3);
     html += ">mm</td></tr>";
-    html += "<tr><th>TREAD_WIDTH</th><td><input name=\"tread_width\" type=\"text\" size=\"10\" value=";
+    html +=
+      "<tr><th>TREAD_WIDTH</th><td><input name=\"tread_width\" id=\"tread_width\" type=\"text\" size=\"10\" value=";
     html += String(g_run.tread_width, 3);
     html += ">mm</td></tr>";
     html += "</table>";
@@ -144,9 +153,9 @@ void webServerSetup(void) {
     html += "<p><h2>GOAL Parameter</h2></p>";
     html += "<table align=\"center\">";
     html += "<tr><th></th><th>X</th><th>Y</th></tr>";
-    html += "<tr><th>AXIS</th><td><input name=\"goal_x\" type=\"text\" size=\"10\" value=";
+    html += "<tr><th>AXIS</th><td><input name=\"goal_x\" type=\"text\" id=\"goal_x\" size=\"10\" value=";
     html += String(g_map.goal_mx);
-    html += "></td><td><input name=\"goal_y\" type=\"text\" size=\"10\" value=";
+    html += "></td><td><input name=\"goal_y\" type=\"text\" size=\"10\" id=\"goal_y\" value=";
     html += String(g_map.goal_my);
     html += "></td></tr>";
     html += "</table>";
@@ -155,15 +164,15 @@ void webServerSetup(void) {
 
     html += "<p><h2>Accel Parameter</h2></p>";
     html += "<table align=\"center\">";
-    html += "<tr><th> </th><th>low</th><th>normal</th><th>high</th></tr>";    
-    html += "<tr><th>Search accel</th><th><input name=\"search_acc_low\" type=\"text\" size=\"10\" value=";
+    html += "<tr><th> </th><th>low</th><th>normal</th><th>high</th></tr>";
+    html += "<tr><th>Search accel</th><th><input name=\"search_acc_low\" id=\"search_acc_low\" type=\"text\" size=\"10\" value=";
     html += String(g_run.search_accel_low, 3);
-    html += "></th><th><input name=\"search_acc\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"search_acc\" id=\"search_acc\" type=\"text\" size=\"10\" value=";
     html += String(g_run.search_accel, 3);
-    html += "></th><th><input name=\"search_acc_high\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"search_acc_high\" id=\"search_acc_high\" type=\"text\" size=\"10\" value=";
     html += String(g_run.search_accel_high, 3);
     html += "></th></tr>";
-    html += "<tr><th>Turn accel</th><td><input name=\"turn_acc\" type=\"text\" size=\"10\" value=";
+    html += "<tr><th>Turn accel</th><td><input name=\"turn_acc\" id=\"turn_acc\" type=\"text\" size=\"10\" value=";
     html += String(g_run.turn_accel, 3);
     html += "></td><td>mm/s/s</td><td></td></tr>";
     html += "</table>";
@@ -172,15 +181,15 @@ void webServerSetup(void) {
 
     html += "<p><h2>Speed Parameter</h2></p>";
     html += "<table align=\"center\">";
-    html += "<tr><th> </th><th>low</th><th>normal</th><th>high</th></tr>";  
-    html += "<tr><th>Search speed</th><th><input name=\"search_spd_low\" type=\"text\" size=\"10\" value=";
+    html += "<tr><th> </th><th>low</th><th>normal</th><th>high</th></tr>";
+    html += "<tr><th>Search speed</th><th><input name=\"search_spd_low\" id=\"search_spd_low\" type=\"text\" size=\"10\" value=";
     html += String(g_run.search_speed_low);
-    html += "></th><th><input name=\"search_spd\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"search_spd\" id=\"search_spd\" type=\"text\" size=\"10\" value=";
     html += String(g_run.search_speed);
-    html += "></th><th><input name=\"search_spd_high\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"search_spd_high\" id=\"search_spd_high\" type=\"text\" size=\"10\" value=";
     html += String(g_run.search_speed_high);
     html += "></th></tr>";
-    html += "<tr><th>max speed</th><td><input name=\"max_spd\" type=\"text\" size=\"10\" value=";
+    html += "<tr><th>max speed</th><td><input name=\"max_spd\" id=\"max_spd\" type=\"text\" size=\"10\" value=";
     html += String(g_run.max_speed);
     html += "></td><td>mm/s</td><td></td></tr>";
     html += "</table>";
@@ -189,26 +198,26 @@ void webServerSetup(void) {
 
     html += "<p><h2>Sura Parameter</h2></p>";
     html += "<table align=\"center\">";
-    html += "<tr><th>ターン前len</th><th>low</th><th>normal</th><th>high</th></tr>";  
-    html += "<tr><th>90</th><th><input name=\"sura_rl90_before_len_low\" type=\"text\" size=\"10\" value=";
+    html += "<tr><th>ターン前len</th><th>low</th><th>normal</th><th>high</th></tr>";
+    html += "<tr><th>90</th><th><input name=\"sura_rl90_before_len_low\" id=\"sura_rl90_before_len_low\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90_before_len_low);
-    html += "></th><th><input name=\"sura_rl90_before_len\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"sura_rl90_before_len\" id=\"sura_rl90_before_len\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90_before_len);
-    html += "></th><th><input name=\"sura_rl90_before_len_high\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"sura_rl90_before_len_high\" id=\"sura_rl90_before_len_high\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90_before_len_high);
     html += "></th></tr>";
-    html += "<tr><th>90H</th><td><input name=\"sura_rl90h_before_len_low\" type=\"text\" size=\"10\" value=";
+    html += "<tr><th>90H</th><td><input name=\"sura_rl90h_before_len_low\" id=\"sura_rl90h_before_len_low\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90h_before_len_low);
-    html += "></th><th><input name=\"sura_rl90h_before_len\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"sura_rl90h_before_len\" id=\"sura_rl90h_before_len\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90h_before_len);
-    html += "></th><th><input name=\"sura_rl90h_before_len_high\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"sura_rl90h_before_len_high\" id=\"sura_rl90h_before_len_high\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90h_before_len_high);
     html += "></th></tr>";
-    html += "<tr><th>45</th><td><input name=\"sura_rl45_before_len_low\" type=\"text\" size=\"10\" value=";
+    html += "<tr><th>45</th><td><input name=\"sura_rl45_before_len_low\" id=\"sura_rl45_before_len_low\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl45_before_len_low);
-    html += "></th><th><input name=\"sura_rl45_before_len\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"sura_rl45_before_len\" id=\"sura_rl45_before_len\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl45_before_len);
-    html += "></th><th><input name=\"sura_rl45_before_len_high\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"sura_rl45_before_len_high\" id=\"sura_rl45_before_len_high\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl45_before_len_high);
     html += "></th></tr>";
     html += "</table>";
@@ -216,36 +225,36 @@ void webServerSetup(void) {
     html += "<br>";
 
     html += "<table align=\"center\">";
-    html += "<tr><th>旋回</th><th>low</th><th>normal</th><th>high</th></tr>";  
-    html += "<tr><th>90</th><th><input name=\"sura_rl90_omega_low\" type=\"text\" size=\"10\" value=";
+    html += "<tr><th>旋回</th><th>low</th><th>normal</th><th>high</th></tr>";
+    html += "<tr><th>90</th><th><input name=\"sura_rl90_omega_low\" id=\"sura_rl90_omega_low\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90_omega_low);
-    html += "></th><th><input name=\"sura_rl90_omega\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"sura_rl90_omega\" id=\"sura_rl90_omega\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90_omega);
-    html += "></th><th><input name=\"sura_rl90_omega_high\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"sura_rl90_omega_high\" id=\"sura_rl90_omega_high\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90_omega_high);
     html += "></th></tr>";
-   
-    html += "<tr><th>180</th><td><input name=\"sura_rl180_omega_low\" type=\"text\" size=\"10\" value=";
+
+    html += "<tr><th>180</th><td><input name=\"sura_rl180_omega_low\" id=\"sura_rl180_omega_low\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl180_omega_low);
-    html += "></th><th><input name=\"sura_rl180_omega\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"sura_rl180_omega\" id=\"sura_rl180_omega\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl180_omega);
-    html += "></th><th><input name=\"sura_rl180_omega_high\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"sura_rl180_omega_high\" id=\"sura_rl180_omega_high\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl180_omega_high);
     html += "></th></tr>";
 
-    html += "<tr><th>90H</th><td><input name=\"sura_rl90h_omega_low\" type=\"text\" size=\"10\" value=";
+    html += "<tr><th>90H</th><td><input name=\"sura_rl90h_omega_low\" id=\"sura_rl90h_omega_low\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90h_omega_low);
-    html += "></th><th><input name=\"sura_rl90h_omega\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"sura_rl90h_omega\" id=\"sura_rl90h_omega\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90h_omega);
-    html += "></th><th><input name=\"sura_rl90h_omega_high\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"sura_rl90h_omega_high\" id=\"sura_rl90h_omega_high\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90h_omega_high);
     html += "></th></tr>";
 
-    html += "<tr><th>45</th><td><input name=\"sura_rl45_omega_low\" type=\"text\" size=\"10\" value=";
+    html += "<tr><th>45</th><td><input name=\"sura_rl45_omega_low\" id=\"sura_rl45_omega_low\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl45_omega_low);
-    html += "></th><th><input name=\"sura_rl45_omega\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"sura_rl45_omega\" id=\"sura_rl45_omega\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl45_omega);
-    html += "></th><th><input name=\"sura_rl45_omega_high\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"sura_rl45_omega_high\" id=\"sura_rl45_omega_high\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl45_omega_high);
     html += "></th></tr>";
 
@@ -255,33 +264,33 @@ void webServerSetup(void) {
 
 
     html += "<table align=\"center\">";
-    html += "<tr><th>ターン後len</th><th>low</th><th>normal</th><th>high</th></tr>";  
-    html += "<tr><th>90</th><th><input name=\"sura_rl90_after_len_low\" type=\"text\" size=\"10\" value=";
+    html += "<tr><th>ターン後len</th><th>low</th><th>normal</th><th>high</th></tr>";
+    html += "<tr><th>90</th><th><input name=\"sura_rl90_after_len_low\" id=\"sura_rl90_after_len_low\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90_after_len_low);
-    html += "></th><th><input name=\"sura_rl90_after_len\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"sura_rl90_after_len\" id=\"sura_rl90_after_len\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90_after_len);
-    html += "></th><th><input name=\"sura_rl90_after_len_high\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"sura_rl90_after_len_high\" id=\"sura_rl90_after_len_high\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90_after_len_high);
     html += "></th></tr>";
-    html += "<tr><th>180</th><td><input name=\"sura_rl180_after_len_low\" type=\"text\" size=\"10\" value=";
+    html += "<tr><th>180</th><td><input name=\"sura_rl180_after_len_low\" id=\"sura_rl180_after_len_low\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl180_after_len_low);
-    html += "></th><th><input name=\"sura_rl180_after_len\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"sura_rl180_after_len\" id=\"sura_rl180_after_len\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl180_after_len);
-    html += "></th><th><input name=\"sura_rl180_after_len_high\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"sura_rl180_after_len_high\" id=\"sura_rl180_after_len_high\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl180_after_len_high);
     html += "></th></tr>";
-    html += "<tr><th>90H</th><td><input name=\"sura_rl90h_after_len_low\" type=\"text\" size=\"10\" value=";
+    html += "<tr><th>90H</th><td><input name=\"sura_rl90h_after_len_low\" id=\"sura_rl90h_after_len_low\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90h_after_len_low);
-    html += "></th><th><input name=\"sura_rl90h_after_len\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"sura_rl90h_after_len\" id=\"sura_rl90h_after_len\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90h_after_len);
-    html += "></th><th><input name=\"sura_rl90h_after_len_high\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"sura_rl90h_after_len_high\" id=\"sura_rl90h_after_len_high\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl90h_after_len_high);
     html += "></th></tr>";
-    html += "<tr><th>45</th><td><input name=\"sura_rl45_after_len_low\" type=\"text\" size=\"10\" value=";
+    html += "<tr><th>45</th><td><input name=\"sura_rl45_after_len_low\" id=\"sura_rl45_after_len_low\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl45_after_len_low);
-    html += "></th><th><input name=\"sura_rl45_after_len\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"sura_rl45_after_len\" id=\"sura_rl45_after_len\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl45_after_len);
-    html += "></th><th><input name=\"sura_rl45_after_len_high\" type=\"text\" size=\"10\" value=";
+    html += "></th><th><input name=\"sura_rl45_after_len_high\" id=\"sura_rl45_after_len_high\" type=\"text\" size=\"10\" value=";
     html += String(g_run.sura_rl45_after_len_high);
     html += "></th></tr>";
     html += "</table>";
@@ -356,6 +365,72 @@ void webServerSetup(void) {
     html += "};";
     html += "setInterval(getRightFrontValue, 1000);";
 
+    //チェックボックスの切り替え
+    html += "function toggleData() {";
+    html += "  const isChecked = document.getElementById(\"parameter_init\").checked;";
+    html += "  const val = isChecked ? 1 : 0;";
+    html += "  var xhr = new XMLHttpRequest();";
+    html += "  xhr.onreadystatechange = function() {";
+    html += "    if (this.readyState == 4 && this.status == 200) {";
+    html += "      var data = JSON.parse(this.responseText);";
+    html += "      document.getElementById(\"wall_kp\").value = data.wall_kp;";
+    html += "      document.getElementById(\"ref_left\").value = data.ref_left;";
+    html += "      document.getElementById(\"ref_right\").value = data.ref_right;";
+    html += "      document.getElementById(\"th_left\").value = data.th_left;";
+    html += "      document.getElementById(\"th_right\").value = data.th_right;";
+    html += "      document.getElementById(\"th_fl\").value = data.th_fl;";
+    html += "      document.getElementById(\"th_fr\").value = data.th_fr;";
+    html += "      document.getElementById(\"tire_dia\").value = data.tire_dia;";
+    html += "      document.getElementById(\"tread_width\").value = data.tread_width;";
+    html += "      document.getElementById(\"goal_x\").value = data.goal_x;";
+    html += "      document.getElementById(\"goal_y\").value = data.goal_y;";
+    html += "      document.getElementById(\"search_acc_low\").value = data.search_acc_low;";
+    html += "      document.getElementById(\"search_acc\").value = data.search_acc;";
+    html += "      document.getElementById(\"search_acc_high\").value = data.search_acc_high;";
+    html += "      document.getElementById(\"turn_acc\").value = data.turn_acc;";
+    html += "      document.getElementById(\"search_spd_low\").value = data.search_spd_low;";
+    html += "      document.getElementById(\"search_spd\").value = data.search_spd;";
+    html += "      document.getElementById(\"search_spd_high\").value = data.search_spd_high;";
+    html += "      document.getElementById(\"max_spd\").value = data.max_spd;";
+    html += "      document.getElementById(\"sura_rl90_before_len_low\").value = data.sura_rl90_before_len_low;";
+    html += "      document.getElementById(\"sura_rl90_before_len\").value = data.sura_rl90_before_len;";
+    html += "      document.getElementById(\"sura_rl90_before_len_high\").value = data.sura_rl90_before_len_high;";
+    html += "      document.getElementById(\"sura_rl90h_before_len_low\").value = data.sura_rl90h_before_len_low;";
+    html += "      document.getElementById(\"sura_rl90h_before_len\").value = data.sura_rl90h_before_len;";
+    html += "      document.getElementById(\"sura_rl90h_before_len_high\").value = data.sura_rl90h_before_len_high;";
+    html += "      document.getElementById(\"sura_rl45_before_len_low\").value = data.sura_rl45_before_len_low;";
+    html += "      document.getElementById(\"sura_rl45_before_len\").value = data.sura_rl45_before_len;";
+    html += "      document.getElementById(\"sura_rl45_before_len_high\").value = data.sura_rl45_before_len_high;";
+    html += "      document.getElementById(\"sura_rl90_omega_low\").value = data.sura_rl90_omega_low;";
+    html += "      document.getElementById(\"sura_rl90_omega\").value = data.sura_rl90_omega;";
+    html += "      document.getElementById(\"sura_rl90_omega_high\").value = data.sura_rl90_omega_high;";
+    html += "      document.getElementById(\"sura_rl180_omega_low\").value = data.sura_rl180_omega_low;";
+    html += "      document.getElementById(\"sura_rl180_omega\").value = data.sura_rl180_omega;";
+    html += "      document.getElementById(\"sura_rl180_omega_high\").value = data.sura_rl180_omega_high;";
+    html += "      document.getElementById(\"sura_rl90h_omega_low\").value = data.sura_rl90h_omega_low;";
+    html += "      document.getElementById(\"sura_rl90h_omega\").value = data.sura_rl90h_omega;";
+    html += "      document.getElementById(\"sura_rl90h_omega_high\").value = data.sura_rl90h_omega_high;";
+    html += "      document.getElementById(\"sura_rl45_omega_low\").value = data.sura_rl45_omega_low;";
+    html += "      document.getElementById(\"sura_rl45_omega\").value = data.sura_rl45_omega;";
+    html += "      document.getElementById(\"sura_rl45_omega_high\").value = data.sura_rl45_omega_high;";
+    html += "      document.getElementById(\"sura_rl90_after_len_low\").value = data.sura_rl90_after_len_low;";
+    html += "      document.getElementById(\"sura_rl90_after_len\").value = data.sura_rl90_after_len;";
+    html += "      document.getElementById(\"sura_rl90_after_len_high\").value = data.sura_rl90_after_len_high;";
+    html += "      document.getElementById(\"sura_rl180_after_len_low\").value = data.sura_rl180_after_len_low;";
+    html += "      document.getElementById(\"sura_rl180_after_len\").value = data.sura_rl180_after_len;";
+    html += "      document.getElementById(\"sura_rl180_after_len_high\").value = data.sura_rl180_after_len_high;";
+    html += "      document.getElementById(\"sura_rl90h_after_len_low\").value = data.sura_rl90h_after_len_low;";
+    html += "      document.getElementById(\"sura_rl90h_after_len\").value = data.sura_rl90h_after_len;";
+    html += "      document.getElementById(\"sura_rl90h_after_len_high\").value = data.sura_rl90h_after_len_high;";
+    html += "      document.getElementById(\"sura_rl45_after_len_low\").value = data.sura_rl45_after_len_low;";
+    html += "      document.getElementById(\"sura_rl45_after_len\").value = data.sura_rl45_after_len;";
+    html += "      document.getElementById(\"sura_rl45_after_len_high\").value = data.sura_rl45_after_len_high;";
+    html += "    }";
+    html += "  };";
+    html += "  xhr.open(\"GET\", \"/toggle_param?state=\" + val, true);";
+    html += "  xhr.send(null);";
+    html += "}";
+
     html += "</script>";
     html += "</html>";
     request->send(200, "text/html", html);
@@ -381,6 +456,130 @@ void webServerSetup(void) {
     request->send(200, "text/plain", String(g_sensor.sen_fr.value));
   });
 
+server.on("/toggle_param", HTTP_GET, [](AsyncWebServerRequest *request) {
+    String json = "";
+    if (request->hasParam("state")) {
+        String stateVal = request->getParam("state")->value();
+        if (stateVal == "1") {
+            parameter_select = 1;
+            json = "{";
+            json += "\"wall_kp\":" + String(CON_WALL_KP_INIT,3) + ",";
+            json += "\"ref_left\":" + String(REF_SEN_L_INIT) + ",";
+            json += "\"ref_right\":" + String(REF_SEN_R_INIT) + ",";
+            json += "\"th_left\":" + String(TH_SEN_L_INIT) + ",";
+            json += "\"th_right\":" + String(TH_SEN_R_INIT) + ",";
+            json += "\"th_fl\":" + String(TH_SEN_FL_INIT) + ",";
+            json += "\"th_fr\":" + String(TH_SEN_FR_INIT) +",";
+            json += "\"tire_dia\":" + String(TIRE_DIAMETER_INIT,3) + ",";
+            json += "\"tread_width\":" + String(TREAD_WIDTH_INIT,3) + ",";
+            json += "\"goal_x\":" + String(GOAL_X_INIT) + ",";
+            json += "\"goal_y\":" + String(GOAL_Y_INIT) + ",";
+
+            json += "\"search_acc_low\":" + String(SEARCH_ACCEL_LOW_INIT,3) + ",";
+            json += "\"search_acc\":" + String(SEARCH_ACCEL_INIT,3) + ",";
+            json += "\"search_acc_high\":" + String(SEARCH_ACCEL_HIGH_INIT,3) + ",";
+            json += "\"turn_acc\":" + String(TURN_ACCEL_INIT,3) + ",";
+            json += "\"search_spd_low\":" + String(SEARCH_SPEED_LOW_INIT) + ",";
+            json += "\"search_spd\":" + String(SEARCH_SPEED_INIT) + ",";
+            json += "\"search_spd_high\":" + String(SEARCH_SPEED_HIGH_INIT) + ",";
+            json += "\"max_spd\":" + String(MAX_SPEED_INIT) + ",";
+            json += "\"sura_rl90_before_len_low\":" + String(RL90_BEFORE_LOW_INIT) + ",";
+            json += "\"sura_rl90_before_len\":" + String(RL90_BEFORE_INIT) + ",";
+            json += "\"sura_rl90_before_len_high\":" + String(RL90_BEFORE_HIGH_INIT) + ",";
+            json += "\"sura_rl90h_before_len_low\":" + String(RL90H_BEFORE_LOW_INIT) + ",";
+            json += "\"sura_rl90h_before_len\":" + String(RL90H_BEFORE_INIT) + ",";
+            json += "\"sura_rl90h_before_len_high\":" + String(RL90H_BEFORE_HIGH_INIT) + ",";
+            json += "\"sura_rl45_before_len_low\":" + String(RL45_BEFORE_LOW_INIT,3) + ",";
+            json += "\"sura_rl45_before_len\":" + String(RL45_BEFORE_INIT,3) + ",";
+            json += "\"sura_rl45_before_len_high\":" + String(RL45_BEFORE_HIGH_INIT,3) + ",";
+            json += "\"sura_rl90_omega_low\":" + String(RL90_OMEGA_LOW_INIT) + ",";
+            json += "\"sura_rl90_omega\":" + String(RL90_OMEGA_INIT) + ",";
+            json += "\"sura_rl90_omega_high\":" + String(RL90_OMEGA_HIGH_INIT) + ",";
+            json += "\"sura_rl180_omega_low\":" + String(RL180_OMEGA_LOW_INIT) + ",";
+            json += "\"sura_rl180_omega\":" + String(RL180_OMEGA_INIT) + ",";
+            json += "\"sura_rl180_omega_high\":" + String(RL180_OMEGA_HIGH_INIT) + ",";
+            json += "\"sura_rl90h_omega_low\":" + String(RL90H_OMEGA_LOW_INIT) + ",";
+            json += "\"sura_rl90h_omega\":" + String(RL90H_OMEGA_INIT) + ",";
+            json += "\"sura_rl90h_omega_high\":" + String(RL90H_OMEGA_HIGH_INIT) + ",";
+            json += "\"sura_rl45_omega_low\":" + String(RL45_OMEGA_LOW_INIT) + ",";
+            json += "\"sura_rl45_omega\":" + String(RL45_OMEGA_INIT) + ",";
+            json += "\"sura_rl45_omega_high\":" + String(RL45_OMEGA_HIGH_INIT) + ",";
+            json += "\"sura_rl90_after_len_low\":" + String(RL90_AFTER_LOW_INIT) + ",";
+            json += "\"sura_rl90_after_len\":" + String(RL90_AFTER_INIT) + ",";
+            json += "\"sura_rl90_after_len_high\":" + String(RL90_AFTER_HIGH_INIT) + ",";
+            json += "\"sura_rl180_after_len_low\":" + String(RL180_AFTER_LOW_INIT) + ",";
+            json += "\"sura_rl180_after_len\":" + String(RL180_AFTER_INIT) + ",";
+            json += "\"sura_rl180_after_len_high\":" + String(RL180_AFTER_HIGH_INIT) + ",";
+            json += "\"sura_rl90h_after_len_low\":" + String(RL90H_AFTER_LOW_INIT) + ",";
+            json += "\"sura_rl90h_after_len\":" + String(RL90H_AFTER_INIT) + ",";
+            json += "\"sura_rl90h_after_len_high\":" + String(RL90H_AFTER_HIGH_INIT) + ",";
+            json += "\"sura_rl45_after_len_low\":" + String(RL45_AFTER_LOW_INIT,3) + ",";
+            json += "\"sura_rl45_after_len\":" + String(RL45_AFTER_INIT,3) + ",";
+            json += "\"sura_rl45_after_len_high\":" + String(RL45_AFTER_HIGH_INIT,3);
+            json += "}";
+        } else {
+            parameter_select = 0;
+            json = "{";
+            json += "\"wall_kp\":" + String(g_run.con_wall.kp,3) + ",";
+            json += "\"ref_left\":" + String(g_sensor.sen_l.ref ) + ",";
+            json += "\"ref_right\":" + String(g_sensor.sen_r.ref ) + ",";
+            json += "\"th_left\":" + String(g_sensor.sen_l.th_wall) + ",";
+            json += "\"th_right\":" + String(g_sensor.sen_r.th_wall) + ",";
+            json += "\"th_fl\":" + String(g_sensor.sen_fl.th_wall) + ",";
+            json += "\"th_fr\":" + String(g_sensor.sen_fr.th_wall) +",";
+            json += "\"tire_dia\":" + String(g_run.tire_diameter,3) + ",";
+            json += "\"tread_width\":" + String(g_run.tread_width,3) + ",";
+            json += "\"goal_x\":" + String(g_map.goal_mx) + ",";
+            json += "\"goal_y\":" + String(g_map.goal_my) + ",";
+
+            json += "\"search_acc_low\":" + String(g_run.search_accel_low ,3) + ",";
+            json += "\"search_acc\":" + String(g_run.search_accel,3) + ",";
+            json += "\"search_acc_high\":" + String(g_run.search_accel_high ,3) + ",";
+            json += "\"turn_acc\":" + String(g_run.turn_accel,3) + ",";
+            json += "\"search_spd_low\":" + String(g_run.search_speed_low ) + ",";
+            json += "\"search_spd\":" + String(g_run.search_speed) + ",";
+            json += "\"search_spd_high\":" + String(g_run.search_speed_high ) + ",";
+            json += "\"max_spd\":" + String(g_run.max_speed) + ",";
+            json += "\"sura_rl90_before_len_low\":" + String(g_run.sura_rl90_before_len_low ) + ",";
+            json += "\"sura_rl90_before_len\":" + String( g_run.sura_rl90_before_len ) + ",";
+            json += "\"sura_rl90_before_len_high\":" + String(g_run.sura_rl90_before_len_high) + ",";
+            json += "\"sura_rl90h_before_len_low\":" + String(g_run.sura_rl90h_before_len_low) + ",";
+            json += "\"sura_rl90h_before_len\":" + String(g_run.sura_rl90h_before_len ) + ",";
+            json += "\"sura_rl90h_before_len_high\":" + String( g_run.sura_rl90h_before_len_high ) + ",";
+            json += "\"sura_rl45_before_len_low\":" + String(g_run.sura_rl45_before_len_low,3) + ",";
+            json += "\"sura_rl45_before_len\":" + String(g_run.sura_rl45_before_len,3) + ",";
+            json += "\"sura_rl45_before_len_high\":" + String(g_run.sura_rl45_before_len_high ,3) + ",";
+            json += "\"sura_rl90_omega_low\":" + String(g_run.sura_rl90_omega_low ) + ",";
+            json += "\"sura_rl90_omega\":" + String(g_run.sura_rl90_omega) + ",";
+            json += "\"sura_rl90_omega_high\":" + String(g_run.sura_rl90_omega_high) + ",";
+            json += "\"sura_rl180_omega_low\":" + String(g_run.sura_rl180_omega_low ) + ",";
+            json += "\"sura_rl180_omega\":" + String(g_run.sura_rl180_omega) + ",";
+            json += "\"sura_rl180_omega_high\":" + String(g_run.sura_rl180_omega_high) + ",";
+            json += "\"sura_rl90h_omega_low\":" + String(g_run.sura_rl90h_omega_low) + ",";
+            json += "\"sura_rl90h_omega\":" + String(g_run.sura_rl90h_omega ) + ",";
+            json += "\"sura_rl90h_omega_high\":" + String(g_run.sura_rl90h_omega_high ) + ",";
+            json += "\"sura_rl45_omega_low\":" + String(g_run.sura_rl45_omega_low ) + ",";
+            json += "\"sura_rl45_omega\":" + String(g_run.sura_rl45_omega ) + ",";
+            json += "\"sura_rl45_omega_high\":" + String(g_run.sura_rl45_omega_high ) + ",";
+            json += "\"sura_rl90_after_len_low\":" + String(g_run.sura_rl90_after_len_low) + ",";
+            json += "\"sura_rl90_after_len\":" + String(g_run.sura_rl90_after_len) + ",";
+            json += "\"sura_rl90_after_len_high\":" + String(g_run.sura_rl90_after_len_high) + ",";
+            json += "\"sura_rl180_after_len_low\":" + String(g_run.sura_rl180_after_len_low ) + ",";
+            json += "\"sura_rl180_after_len\":" + String(  g_run.sura_rl180_after_len ) + ",";
+            json += "\"sura_rl180_after_len_high\":" + String(g_run.sura_rl180_after_len_high) + ",";
+            json += "\"sura_rl90h_after_len_low\":" + String(g_run.sura_rl90h_after_len_low) + ",";
+            json += "\"sura_rl90h_after_len\":" + String(g_run.sura_rl90h_after_len) + ",";
+            json += "\"sura_rl90h_after_len_high\":" + String(g_run.sura_rl90h_after_len_high) + ",";
+            json += "\"sura_rl45_after_len_low\":" + String(g_run.sura_rl45_after_len_low,3) + ",";
+            json += "\"sura_rl45_after_len\":" + String( g_run.sura_rl45_after_len,3) + ",";
+            json += "\"sura_rl45_after_len_high\":" + String(g_run.sura_rl45_after_len_high,3);
+
+            json += "}";
+        }
+    }
+    // JSON形式としてブラウザにレスポンスを返す
+    request->send(200, "application/json", json);    
+  });
 
   server.on("/get", HTTP_GET, [](AsyncWebServerRequest* request) {
     String inputMessage;
@@ -469,7 +668,7 @@ void webServerSetup(void) {
     g_run.sura_rl90h_omega = inputMessage.toInt();
     inputMessage = request->getParam("sura_rl90h_omega_high")->value();
     g_run.sura_rl90h_omega_high = inputMessage.toInt();
-    
+
     inputMessage = request->getParam("sura_rl45_omega_low")->value();
     g_run.sura_rl45_omega_low = inputMessage.toInt();
     inputMessage = request->getParam("sura_rl45_omega")->value();
@@ -506,7 +705,7 @@ void webServerSetup(void) {
 
     Serial.println("saved");
     paramWrite();
-    g_run.pulse = g_run.tire_diameter * PI / (35.0 / 10.0 * 20.0 *8.0);
+    g_run.pulse = g_run.tire_diameter * PI / (35.0 / 10.0 * 20.0 * 8.0);
 
     buzzerEnable(INC_FREQ);
     delay(30);

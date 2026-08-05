@@ -12,6 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+typedef struct{
+  double gain;
+  short left_ref;
+  short right_ref;
+  short left_side_th;
+  short right_side_th;
+  short left_front_th;
+  short right_front_th;
+  double tire;
+  double tread;
+  char goal_x;
+  char goal_y;
+  double search_accel;
+  double turn_accel;
+  short search_speed;
+  short max_speed;
+}t_flash_value;
+
+t_flash_value g_flash_value;
+
+
 void flashInit(void)
 {
   String cmd_tmp;
@@ -57,6 +78,10 @@ void flashInit(void)
   appendFile(SPIFFS, file_tmp, cmd_tmp);
   cmd_tmp = "max_speed " + String(MAX_SPEED_INIT) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
+
+  parameter_select = 1;
+  cmd_tmp = "parameter_init 1\n";
+  writeFile(SPIFFS, "/parameters_init.txt", cmd_tmp);
 
   PWMInterruptStart();
   controlInterruptStart();
@@ -204,6 +229,10 @@ void paramWrite(void)
   cmd_tmp = "max_speed " + String(g_run.max_speed) + '\n';
   appendFile(SPIFFS, file_tmp, cmd_tmp);
 
+  cmd_tmp = "parameter_init " + String(parameter_select) + '\n';
+  writeFile(SPIFFS, "/parameters_init.txt", cmd_tmp);
+  Serial.printf("parameter_select %d\n\r", parameter_select);
+
   controlInterruptStart();
   sensorInterruptStart();
   PWMInterruptStart();
@@ -223,7 +252,29 @@ void paramRead(void)
   PWMInterruptStop();
   delay(10);
 
-  File file = SPIFFS.open("/parameters.txt");
+  file_tmp = "/parameters_init.txt";
+  File file = SPIFFS.open(file_tmp);
+
+  if (!file || file.isDirectory()) {
+    Serial.println("- parameter_init failed to open file for reading");
+    parameter_select = 1;
+    cmd_tmp = "parameter_init 1\n";
+    writeFile(SPIFFS, "/parameters_init.txt", cmd_tmp);
+  } else {
+    while (file.available()) {
+      int index = split(file.readStringUntil('\n'), ' ', cmds);
+      if (cmds[0].equals("parameter_init")) {
+        Serial.println("hit parameter_init");
+        parameter_select = cmds[1].toInt();
+      }
+      cmds[0] = { "\0" };
+      cmds[1] = { "\0" };
+    }
+  }
+  Serial.printf("parameter_select %d\n\r", parameter_select);
+  file.close();  
+
+  file = SPIFFS.open("/parameters.txt");
   if (!file || file.isDirectory()) {
     Serial.println("- failed to open file for reading");
     flashInit();
@@ -233,39 +284,35 @@ void paramRead(void)
   while (file.available()) {
     int index = split(file.readStringUntil('\n'), ' ', cmds);
     if (cmds[0].equals("ref_sen_r")) {
-      g_sensor.sen_r.ref = cmds[1].toInt();
+      g_flash_value.right_ref = cmds[1].toInt();
     } else if (cmds[0].equals("ref_sen_l")) {
-      g_sensor.sen_l.ref = cmds[1].toInt();
+      g_flash_value.left_ref = cmds[1].toInt();
     } else if (cmds[0].equals("th_sen_r")) {
-      g_sensor.sen_r.th_wall = cmds[1].toInt();
-      g_sensor.sen_r.th_control = g_sensor.sen_r.th_wall;
+      g_flash_value.right_side_th = cmds[1].toInt();
     } else if (cmds[0].equals("th_sen_l")) {
-      g_sensor.sen_l.th_wall = cmds[1].toInt();
-      g_sensor.sen_l.th_control = g_sensor.sen_l.th_wall;
+      g_flash_value.left_side_th = cmds[1].toInt();
     } else if (cmds[0].equals("th_sen_fr")) {
-      g_sensor.sen_fr.th_wall = cmds[1].toInt();
+      g_flash_value.right_front_th = cmds[1].toInt();
     } else if (cmds[0].equals("th_sen_fl")) {
-      g_sensor.sen_fl.th_wall = cmds[1].toInt();
+      g_flash_value.left_front_th = cmds[1].toInt();
     } else if (cmds[0].equals("goal_x")) {
-      g_map.goal_mx = cmds[1].toInt();
+      g_flash_value.goal_x = cmds[1].toInt();
     } else if (cmds[0].equals("goal_y")) {
-      g_map.goal_my = cmds[1].toInt();
+      g_flash_value.goal_y = cmds[1].toInt();
     } else if (cmds[0].equals("tire_d")) {
-      g_run.tire_diameter = cmds[1].toFloat();
+      g_flash_value.tire = cmds[1].toFloat();
     } else if (cmds[0].equals("tread_w")) {
-      g_run.tread_width = cmds[1].toFloat();
+      g_flash_value.tread = cmds[1].toFloat();
     } else if (cmds[0].equals("con_kp")) {
-      g_run.con_wall.kp = cmds[1].toFloat();
-
+      g_flash_value.gain = cmds[1].toFloat();
     } else if (cmds[0].equals("search_accel")) {
-      g_run.search_accel = cmds[1].toFloat();
+      g_flash_value.search_accel = cmds[1].toFloat();
     } else if (cmds[0].equals("turn_accel")) {
-      g_run.turn_accel = cmds[1].toFloat();
+      g_flash_value.turn_accel = cmds[1].toFloat();
     } else if (cmds[0].equals("search_speed")) {
-      g_run.search_speed = cmds[1].toInt();
+      g_flash_value.search_speed = cmds[1].toInt();
     } else if (cmds[0].equals("max_speed")) {
-      g_run.max_speed = cmds[1].toInt();
-
+      g_flash_value.max_speed = cmds[1].toInt();
     } else {
       Serial.print("parameter cmds Error ");
       Serial.println(cmds[0]);
@@ -273,11 +320,46 @@ void paramRead(void)
       flashInit();
       break;
     }
-    g_run.pulse = g_run.tire_diameter * PI / (35.0 / 10.0 * 20.0 *8.0);
-    cmds[0] = {"\0"};
-    cmds[1] = {"\0"};
+    cmds[0] = { "\0" };
+    cmds[1] = { "\0" };
   }
   file.close();
+
+  if (parameter_select == 1) {
+    g_sensor.sen_r.ref = REF_SEN_R_INIT;
+    g_sensor.sen_l.ref = REF_SEN_L_INIT;
+    g_sensor.sen_r.th_control = g_sensor.sen_r.th_wall = TH_SEN_R_INIT;
+    g_sensor.sen_l.th_control = g_sensor.sen_l.th_wall = TH_SEN_L_INIT;
+    g_sensor.sen_fr.th_wall = TH_SEN_FR_INIT;
+    g_sensor.sen_fl.th_wall = TH_SEN_FL_INIT;
+    g_map.goal_mx = GOAL_X_INIT;
+    g_map.goal_my = GOAL_Y_INIT;
+    g_run.tire_diameter = TIRE_DIAMETER_INIT;
+    g_run.tread_width = TREAD_WIDTH_INIT;
+    g_run.con_wall.kp = CON_WALL_KP_INIT;
+    g_run.search_accel = SEARCH_ACCEL_INIT;
+    g_run.turn_accel = TURN_ACCEL_INIT;
+    g_run.search_speed = SEARCH_SPEED_INIT;
+    g_run.max_speed = MAX_SPEED_INIT;
+  } else {
+    g_sensor.sen_r.ref = g_flash_value.right_ref;
+    g_sensor.sen_l.ref = g_flash_value.left_ref;
+    g_sensor.sen_r.th_control = g_sensor.sen_r.th_wall = g_flash_value.right_side_th;
+    g_sensor.sen_l.th_control = g_sensor.sen_l.th_wall = g_flash_value.left_side_th;
+    g_sensor.sen_fr.th_wall = g_flash_value.right_front_th;
+    g_sensor.sen_fl.th_wall = g_flash_value.left_front_th;
+    g_map.goal_mx = g_flash_value.goal_x;
+    g_map.goal_my = g_flash_value.goal_y;
+    g_run.tire_diameter = g_flash_value.tire;
+    g_run.tread_width = g_flash_value.tread;
+    g_run.con_wall.kp = g_flash_value.gain;
+    g_run.search_accel = g_flash_value.search_accel;
+    g_run.turn_accel = g_flash_value.turn_accel;
+    g_run.search_speed = g_flash_value.search_speed;
+    g_run.max_speed = g_flash_value.max_speed;
+  }
+  g_run.pulse = g_run.tire_diameter * PI / (35.0 / 10.0 * 20.0 * 8.0);
+
   controlInterruptStart();
   sensorInterruptStart();
   PWMInterruptStart();
