@@ -302,7 +302,7 @@ for(int i=0;i<20;i++){
   Serial.println();
 
 
-  if ((g_misc.mode_select >= 8) && (g_misc.mode_select <= 11)) {
+  if ((g_misc.mode_select >= 8) && (g_misc.mode_select <= 9)) {
      changeHighSura();
   }
   if ((g_misc.mode_select >= 10) && (g_misc.mode_select <= 11)) {
