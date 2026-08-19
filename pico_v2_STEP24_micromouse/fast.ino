@@ -392,7 +392,7 @@ for(int i=0;i<20;i++){
           }
           break;
         case L45:
-          g_run.sura(R45, l_speed);
+          g_run.sura(L45, l_speed);
           if (naname_f == 0) {
             naname_f = 1;
           } else {
