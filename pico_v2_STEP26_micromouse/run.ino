@@ -390,6 +390,8 @@ void RUN::sura(t_sura_mode dir,int init_speed)
   switch(dir){
     case R90:
     case L90:
+    case R90V:
+    case L90V:
       if(init_speed ==g_run.search_speed_low){
         omega = init_speed/(45.0f-(float)pre_st_low);
         upper_speed_limit = omega*(45.0f-(float)pre_st_low + tread_width/2.0f);
@@ -461,20 +463,7 @@ void RUN::sura(t_sura_mode dir,int init_speed)
         lower_speed_limit = omega*(45.0f-(float)pre_st_high - tread_width/2.0f);
         obj_step = (int)((45.0f-(float)pre_st_high) * PI *3/2 / pulse)+sura_rl135_omega_high;//<=旋回角度はここで調整する        
       }    
-    case R90V:
-    case L90V:
-      if(init_speed==g_run.search_speed){
-        omega = init_speed/(45.0f-(float)pre_st_nor);
-        upper_speed_limit = omega*(45.0f-(float)pre_st_nor + tread_width/2.0f);
-        lower_speed_limit = omega*(45.0f-(float)pre_st_nor - tread_width/2.0f);
-        obj_step = (int)((45.0f-(float)pre_st_nor) * PI / pulse)+sura_rl90_omega;//<=旋回角度はここで調整する
-      }else{
-        omega = init_speed/(45.0f-(float)pre_st_high);
-        upper_speed_limit = omega*(45.0f-(float)pre_st_high + tread_width/2.0f);
-        lower_speed_limit = omega*(45.0f-(float)pre_st_high - tread_width/2.0f);
-        obj_step = (int)((45.0f-(float)pre_st_high) * PI / pulse)+sura_rl90_omega_high;//<=旋回角度はここで調整する        
-      }
-    break;
+
   }
 
 

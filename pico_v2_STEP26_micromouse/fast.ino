@@ -382,7 +382,11 @@ void FAST::runPatternSura(short gx, short gy, float l_accel, float l_speed) {
           length_ago = -13;
           speed_ago = 0;
         }
-
+      } else if ((i > 1) && ((second_pattern[i - 1] == R90V) || (second_pattern[i - 1] == L90V))) {
+        if (naname_f == 1) {
+          length_ago = -13;
+          speed_ago = 0;
+        }
       } else {
         length_ago = 0;
         speed_ago = 0;
@@ -450,10 +454,10 @@ void FAST::runPatternSura(short gx, short gy, float l_accel, float l_speed) {
           }
           break;
         case R90V:  //R90'
-          return g_run.sura(R90V,l_speed);
+          g_run.sura(R90V,l_speed);
           break;
         case L90V:  //L90'
-          return g_run.sura(L90V,l_speed);
+          g_run.sura(L90V,l_speed);
           break;          
       }
     }
