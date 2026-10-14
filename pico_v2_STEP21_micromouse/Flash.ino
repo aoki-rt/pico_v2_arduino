@@ -359,10 +359,10 @@ void paramRead(void)
       g_sensor.sen_l.ref = cmds[1].toInt();
     } else if (cmds[0].equals("th_sen_r")) {
       g_sensor.sen_r.th_wall = cmds[1].toInt();
-      g_sensor.sen_r.th_control = g_sensor.sen_r.th_wall;
+      g_sensor.sen_r.th_control = (g_sensor.sen_r.th_wall+30);
     } else if (cmds[0].equals("th_sen_l")) {
       g_sensor.sen_l.th_wall = cmds[1].toInt();
-      g_sensor.sen_l.th_control = g_sensor.sen_l.th_wall;
+      g_sensor.sen_l.th_control = (g_sensor.sen_l.th_wall+30);
     } else if (cmds[0].equals("th_sen_fr")) {
       g_sensor.sen_fr.th_wall = cmds[1].toInt();
     } else if (cmds[0].equals("th_sen_fl")) {
